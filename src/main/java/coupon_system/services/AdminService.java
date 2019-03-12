@@ -41,7 +41,7 @@ public class AdminService {
         companyRepository.save(company);
     }
 
-    public Collection<Company> getAllCompanies() throws CompanyNotExistsException {
+    public Collection<Company> getAllCompanies() throws CouponSystemException {
 
         Collection<Company> companies = companyRepository.findAll();
 
