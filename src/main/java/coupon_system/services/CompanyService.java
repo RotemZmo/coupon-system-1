@@ -1,7 +1,9 @@
 package coupon_system.services;
 
+import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.exceptions.CouponSystemException;
+import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
 import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
@@ -85,6 +87,16 @@ public class CompanyService {
         couponRepository.save(coupon);
     }
 
+    public boolean login(String name, String password) throws CouponSystemException {
+        Optional<Company> canLogin = Optional.ofNullable(companyRepository.login(name, password));
+        if (canLogin.isPresent()) {
+            loggedCompany = canLogin.get().getId();
+            return true;
+        } else {
+            throw new LoginFailedException("Login failed, please try again.");
+        }
+    }
+
     // Checking if title of the new coupon is not duplicate
     static void isCouponTitleDuplicate(String couponTitle, CouponRepository couponRepository) throws CouponSystemException {
         Optional<Coupon> isCouponTitleDuplicate = Optional
@@ -102,11 +114,6 @@ public class CompanyService {
         if (!isCompanyOwnsCoupon.isPresent()) {
             throw new CompanyDoesntOwnCoupon("You don't own this coupon.");
         }
-    }
-
-    @Deprecated
-    public void setLoggedCompany(int loggedCompany) {
-        this.loggedCompany = loggedCompany;
     }
 
 }

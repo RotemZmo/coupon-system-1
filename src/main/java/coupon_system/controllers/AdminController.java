@@ -57,7 +57,7 @@ public class AdminController {
     public ResponseEntity<?> deleteCompany(@PathVariable int id) {
         try {
             adminService.deleteCompany(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Company successfully deleted.", HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -97,7 +97,7 @@ public class AdminController {
     public ResponseEntity<?> deleteCoupon(@PathVariable int id) {
         try {
             adminService.deleteCoupon(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Coupon successfully deleted.", HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -137,7 +137,7 @@ public class AdminController {
     public ResponseEntity<?> deleteCustomer(@PathVariable int id) {
         try {
             adminService.deleteCustomer(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Customer successfully deleted.", HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

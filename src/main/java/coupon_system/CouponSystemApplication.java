@@ -26,10 +26,13 @@ public class CouponSystemApplication {
         /**
          * LOGGED COMPANY
          * */
-        companyService.setLoggedCompany(6);
+        companyService.login("comp", "comp");
         /**
          *
          * */
+
+        System.out.println(companyService.getAllCompanyCoupons());
+
 
     }
 
