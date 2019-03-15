@@ -4,8 +4,8 @@ import coupon_system.enums.CouponType;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Optional;
 
 @Entity
 public class Coupon implements Serializable, Comparable<Coupon> {
@@ -34,6 +34,8 @@ public class Coupon implements Serializable, Comparable<Coupon> {
     private String image;
     @ManyToOne
     private Company company;
+    @ManyToMany(mappedBy = "coupons")
+    private Collection<Customer> customers;
 
     public Coupon() {
     }

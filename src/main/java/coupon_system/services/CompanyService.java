@@ -2,6 +2,7 @@ package coupon_system.services;
 
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
+import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
@@ -33,15 +34,44 @@ public class CompanyService {
         createCoupon(coupon, couponRepository, companyRepository, loggedCompany);
     }
 
+    public Coupon getCompanyCoupon(int couponId) throws CouponSystemException {
+        this.isCompanyOwnsCoupon(couponId);
+        return couponRepository.findCompanyCoupon(couponId, loggedCompany);
+    }
+
     public Collection<Coupon> getAllCompanyCoupons() throws CouponSystemException {
 
-        Collection<Coupon> allCompanyCoupons = couponRepository.findAllByCompanyId(loggedCompany);
+        Collection<Coupon> coupons = couponRepository.findAllCompanyCoupons(loggedCompany);
 
         // Checking if company owns at least one coupon
-        if (!allCompanyCoupons.isEmpty()) {
-            return allCompanyCoupons;
+        if (!coupons.isEmpty()) {
+            return coupons;
         } else {
             throw new CompanyDoesntOwnCoupon("You have no coupons.");
+        }
+    }
+
+    public Collection<Coupon> getAllCompanyCouponsByType(CouponType couponType) throws CompanyDoesntOwnCoupon {
+
+        Collection<Coupon> coupons = couponRepository.findAllCompanyCouponsByType(loggedCompany, couponType);
+
+        // Checking if company owns at least one coupon by specified type
+        if (!coupons.isEmpty()) {
+            return coupons;
+        } else {
+            throw new CompanyDoesntOwnCoupon("You have no coupons by type: " + couponType + ".");
+        }
+    }
+
+    public Collection<Coupon> getAllCompanyCouponsByPrice(double price) throws CompanyDoesntOwnCoupon {
+
+        Collection<Coupon> coupons = couponRepository.findAllCompanyCouponsByPrice(loggedCompany, price);
+
+        // Checking if company owns at least one coupon by specified price
+        if (!coupons.isEmpty()) {
+            return coupons;
+        } else {
+            throw new CompanyDoesntOwnCoupon("You have no coupons by type: " + price + ".");
         }
     }
 
@@ -78,11 +108,12 @@ public class CompanyService {
         couponRepository.deleteById(id);
     }
 
+    public void deleteExpiredCoupons() {
+        couponRepository.deleteExpiredCoupons();
+    }
+
     static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, int loggedCompany) throws CouponSystemException {
-
-        // Checking if title of the new coupon is not duplicate
         isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
-
         coupon.setCompany(companyRepository.findById(loggedCompany));
         couponRepository.save(coupon);
     }
@@ -108,9 +139,9 @@ public class CompanyService {
     }
 
     // Checking if company is owner of the coupon
-    private void isCompanyOwnsCoupon(int couponID) throws CouponSystemException {
+    private void isCompanyOwnsCoupon(int couponId) throws CouponSystemException {
         Optional<Coupon> isCompanyOwnsCoupon = Optional
-                .ofNullable(couponRepository.findByIdAndCompanyId(couponID, loggedCompany));
+                .ofNullable(couponRepository.findCompanyCoupon(couponId, loggedCompany));
         if (!isCompanyOwnsCoupon.isPresent()) {
             throw new CompanyDoesntOwnCoupon("You don't own this coupon.");
         }

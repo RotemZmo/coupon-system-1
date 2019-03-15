@@ -1,6 +1,5 @@
 package coupon_system.services;
 
-import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
 import coupon_system.exceptions.CouponSystemException;
@@ -26,7 +25,11 @@ public class CustomerService {
         this.couponRepository = couponRepository;
     }
 
-    public void purchaseCoupon(int couponId) {
+    public void purchaseCoupon(int couponId) throws CouponSystemException {
+        AdminService.isCouponExists(couponId, couponRepository);
+        Customer customer = customerRepository.findById(loggedCustomer);
+        customer.purchaseCoupon(couponRepository.findById(couponId));
+        customerRepository.save(customer);
     }
 
     public Collection<Coupon> getAllCustomerCoupons() {
@@ -37,6 +40,10 @@ public class CustomerService {
         return null;
     }
 
+//    public Coupon getCustCoupon(int id) {
+//        return couponRepository.findCustomerCoupon(id, loggedCustomer);
+//    }
+
     public boolean login(String name, String password) throws CouponSystemException {
         Optional<Customer> canLogin = Optional.ofNullable(customerRepository.login(name, password));
         if (canLogin.isPresent()) {
@@ -46,4 +53,5 @@ public class CustomerService {
             throw new LoginFailedException("Login failed, please try again.");
         }
     }
+
 }

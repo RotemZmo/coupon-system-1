@@ -16,7 +16,7 @@ public class Customer implements Serializable, Comparable<Customer> {
     private String password;
     @Column(nullable = false)
     private String email;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Coupon> coupons;
 
     public Customer() {
@@ -86,6 +86,10 @@ public class Customer implements Serializable, Comparable<Customer> {
 
     public void setCoupons(Collection<Coupon> coupons) {
         this.coupons = coupons;
+    }
+
+    public void purchaseCoupon(Coupon coupon) {
+        this.coupons.add(coupon);
     }
 
     @Override

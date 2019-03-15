@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 
 // Service for registration
 @Component
-public class AnonymousService {
+public class RegistrationService {
 
     private final AdminService adminService;
 
     @Autowired
-    public AnonymousService(AdminService adminService) {
+    public RegistrationService(AdminService adminService) {
         this.adminService = adminService;
     }
 

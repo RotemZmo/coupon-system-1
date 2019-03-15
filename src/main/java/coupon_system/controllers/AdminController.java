@@ -33,6 +33,16 @@ public class AdminController {
         }
     }
 
+    @RequestMapping(path = "companyById/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCompanyById(@PathVariable("id") int companyId) {
+        try {
+            Company company = adminService.getCompanyById(companyId);
+            return new ResponseEntity<>(company, HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(path = "company", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCompanies() {
         try {
@@ -55,18 +65,24 @@ public class AdminController {
 
     @RequestMapping(path = "company/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCompany(@PathVariable int id) {
-        try {
-            adminService.deleteCompany(id);
-            return new ResponseEntity<>("Company successfully deleted.", HttpStatus.OK);
-        } catch (CouponSystemException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        adminService.deleteCompany(id);
+        return new ResponseEntity<>("Company successfully deleted.", HttpStatus.OK);
     }
 
     @RequestMapping(path = "coupon", method = RequestMethod.POST)
     public ResponseEntity<?> createCoupon(@RequestBody Coupon coupon) {
         try {
             adminService.createCoupon(coupon);
+            return new ResponseEntity<>(coupon, HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "couponById/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCouponById(@PathVariable("id") int couponId) {
+        try {
+            Coupon coupon = adminService.getCouponById(couponId);
             return new ResponseEntity<>(coupon, HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -95,18 +111,24 @@ public class AdminController {
 
     @RequestMapping(path = "coupon/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCoupon(@PathVariable int id) {
-        try {
-            adminService.deleteCoupon(id);
-            return new ResponseEntity<>("Coupon successfully deleted.", HttpStatus.OK);
-        } catch (CouponSystemException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        adminService.deleteCoupon(id);
+        return new ResponseEntity<>("Coupon successfully deleted.", HttpStatus.OK);
     }
 
     @RequestMapping(path = "customer", method = RequestMethod.POST)
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
             adminService.createCustomer(customer);
+            return new ResponseEntity<>(customer, HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "customerById/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCustomerById(@PathVariable("id") int customerId) {
+        try {
+            Customer customer = adminService.getCustomerById(customerId);
             return new ResponseEntity<>(customer, HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -135,12 +157,7 @@ public class AdminController {
 
     @RequestMapping(path = "customer/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCustomer(@PathVariable int id) {
-        try {
-            adminService.deleteCustomer(id);
-            return new ResponseEntity<>("Customer successfully deleted.", HttpStatus.OK);
-        } catch (CouponSystemException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        adminService.deleteCustomer(id);
+        return new ResponseEntity<>("Customer successfully deleted.", HttpStatus.OK);
     }
-
 }

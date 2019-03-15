@@ -31,6 +31,16 @@ public class CompanyController {
         }
     }
 
+    @RequestMapping(path = "couponById/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCompanyCoupon(@PathVariable("id") int couponId) {
+        try {
+            Coupon coupon = companyService.getCompanyCoupon(couponId);
+            return new ResponseEntity<>(coupon, HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(path = "coupon", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCoupons() {
         try {

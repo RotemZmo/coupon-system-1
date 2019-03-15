@@ -41,6 +41,11 @@ public class AdminService {
         companyRepository.save(company);
     }
 
+    public Company getCompanyById(int companyId) throws CouponSystemException {
+        this.isCompanyExists(companyId);
+        return companyRepository.findById(companyId);
+    }
+
     public Collection<Company> getAllCompanies() throws CouponSystemException {
 
         Collection<Company> companies = companyRepository.findAll();
@@ -59,14 +64,18 @@ public class AdminService {
         companyRepository.save(company);
     }
 
-    public void deleteCompany(int id) throws CouponSystemException {
-        isCompanyExists(id);
+    public void deleteCompany(int id) {
         companyRepository.deleteById(id);
     }
 
     public void createCoupon(Coupon coupon) throws CouponSystemException {
         this.isCompanyExists(coupon.getCompanyId());
         CompanyService.createCoupon(coupon, couponRepository, companyRepository, coupon.getCompanyId());
+    }
+
+    public Coupon getCouponById(int couponId) throws CouponSystemException {
+        isCouponExists(couponId, couponRepository);
+        return couponRepository.findById(couponId);
     }
 
     public Collection<Coupon> getAllCoupons() throws CouponSystemException {
@@ -84,7 +93,7 @@ public class AdminService {
     public void updateCoupon(Coupon coupon) throws CouponSystemException {
 
         this.isCompanyExists(coupon.getCompanyId());
-        this.isCouponExists(coupon.getId());
+        isCouponExists(coupon.getId(), couponRepository);
         CompanyService.isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
 
         // Checking if updating end date is not expired
@@ -106,14 +115,18 @@ public class AdminService {
         }
     }
 
-    public void deleteCoupon(int id) throws CouponSystemException {
-        this.isCouponExists(id);
+    public void deleteCoupon(int id) {
         couponRepository.deleteById(id);
     }
 
     public void createCustomer(Customer customer) throws CouponSystemException {
         this.isCustomerNameDuplicate(customer.getName());
         customerRepository.save(customer);
+    }
+
+    public Customer getCustomerById(int customerId) throws CouponSystemException {
+        this.isCustomerExists(customerId);
+        return customerRepository.findById(customerId);
     }
 
     public Collection<Customer> getAllCustomers() throws CouponSystemException {
@@ -134,8 +147,7 @@ public class AdminService {
         customerRepository.save(customer);
     }
 
-    public void deleteCustomer(int id) throws CouponSystemException {
-        this.isCustomerExists(id);
+    public void deleteCustomer(int id) {
         customerRepository.deleteById(id);
     }
 
@@ -147,19 +159,19 @@ public class AdminService {
         }
     }
 
+    // Checking if coupon exists in database
+    static void isCouponExists(int couponId, CouponRepository couponRepository) throws CouponSystemException {
+        Optional<Coupon> isCouponExists = Optional.ofNullable(couponRepository.findById(couponId));
+        if (!isCouponExists.isPresent()) {
+            throw new CustomerNotExistsException("This coupon doesn't exist.");
+        }
+    }
+
     // Checking if customer exists in database
     private void isCustomerExists(int customerID) throws CouponSystemException {
         Optional<Customer> isCustomerExists = Optional.ofNullable(customerRepository.findById(customerID));
         if (!isCustomerExists.isPresent()) {
             throw new CustomerNotExistsException("This customer doesn't exist.");
-        }
-    }
-
-    // Checking if coupon exists in database
-    private void isCouponExists(int couponID) throws CouponSystemException {
-        Optional<Coupon> isCouponExists = Optional.ofNullable(couponRepository.findById(couponID));
-        if (!isCouponExists.isPresent()) {
-            throw new CustomerNotExistsException("This coupon doesn't exist.");
         }
     }
 
