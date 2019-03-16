@@ -8,6 +8,7 @@ import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
 import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
+import coupon_system.exceptions.couponExceptions.CouponUnavaliableException;
 import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,11 @@ public class CompanyService {
         this.couponRepository = couponRepository;
     }
 
-    public void createCoupon(Coupon coupon) throws CouponSystemException {
+    public void createCoupon(Coupon coupon) throws CouponTitleDuplicateException {
         createCoupon(coupon, couponRepository, companyRepository, loggedCompany);
     }
 
-    public Coupon getCompanyCoupon(int couponId) throws CouponSystemException {
+    public Coupon getCompanyCoupon(int couponId) throws CompanyDoesntOwnCoupon {
         this.isCompanyOwnsCoupon(couponId);
         return couponRepository.findCompanyCoupon(couponId, loggedCompany);
     }
@@ -75,7 +76,7 @@ public class CompanyService {
         }
     }
 
-    public void updateCoupon(Coupon coupon) throws CouponSystemException {
+    public void updateCoupon(Coupon coupon) throws CouponUnavaliableException, CompanyDoesntOwnCoupon, CouponExpiredException {
 
         this.isCompanyOwnsCoupon(coupon.getId());
 
@@ -93,17 +94,17 @@ public class CompanyService {
 
                     couponRepository.save(updCoupon);
                 } else {
-                    throw new CouponExpiredException("Not allowed to update price to less than 1.");
+                    throw new CouponUnavaliableException("Not allowed to update price to less than 1.");
                 }
             } else {
-                throw new CouponExpiredException("Not allowed to update amount to less than 1.");
+                throw new CouponUnavaliableException("Not allowed to update amount to less than 1.");
             }
         } else {
             throw new CouponExpiredException("Not allowed to update the coupon to expired date.");
         }
     }
 
-    public void deleteCoupon(int id) throws CouponSystemException {
+    public void deleteCoupon(int id) throws CompanyDoesntOwnCoupon {
         this.isCompanyOwnsCoupon(id);
         couponRepository.deleteById(id);
     }
@@ -112,7 +113,7 @@ public class CompanyService {
         couponRepository.deleteExpiredCoupons();
     }
 
-    static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, int loggedCompany) throws CouponSystemException {
+    static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, int loggedCompany) throws CouponTitleDuplicateException {
         isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
         coupon.setCompany(companyRepository.findById(loggedCompany));
         couponRepository.save(coupon);
@@ -129,7 +130,7 @@ public class CompanyService {
     }
 
     // Checking if title of the new coupon is not duplicate
-    static void isCouponTitleDuplicate(String couponTitle, CouponRepository couponRepository) throws CouponSystemException {
+    static void isCouponTitleDuplicate(String couponTitle, CouponRepository couponRepository) throws CouponTitleDuplicateException {
         Optional<Coupon> isCouponTitleDuplicate = Optional
                 .ofNullable(couponRepository.findByTitle(couponTitle));
         if (isCouponTitleDuplicate.isPresent()) {
@@ -139,7 +140,7 @@ public class CompanyService {
     }
 
     // Checking if company is owner of the coupon
-    private void isCompanyOwnsCoupon(int couponId) throws CouponSystemException {
+    private void isCompanyOwnsCoupon(int couponId) throws CompanyDoesntOwnCoupon {
         Optional<Coupon> isCompanyOwnsCoupon = Optional
                 .ofNullable(couponRepository.findCompanyCoupon(couponId, loggedCompany));
         if (!isCompanyOwnsCoupon.isPresent()) {

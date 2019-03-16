@@ -24,18 +24,13 @@ public class CouponSystemApplication {
         CompanyService companyService = context.getBean("companyService", CompanyService.class);
         CustomerService customerService = context.getBean("customerService", CustomerService.class);
         /**
-         * LOGGED COMPANY
+         * LOGGED COMPANY & CUSTOMER
          * */
         companyService.login("comp", "comp");
-        /**
-         * LOGGED CUSTOMER
-         * */
         customerService.login("cust", "cust");
         /**
          *
          * */
-
-//        System.out.println(customerService.getCustCoupon(13));
 
     }
 

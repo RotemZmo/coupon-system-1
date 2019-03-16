@@ -8,6 +8,7 @@ import coupon_system.exceptions.companyExceptions.CompanyNameDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
 import coupon_system.exceptions.couponExceptions.CouponNotExistsException;
+import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
 import coupon_system.exceptions.customerExceptions.CustomerNameDuplicateException;
 import coupon_system.exceptions.customerExceptions.CustomerNotExistsException;
 import coupon_system.repositories.CompanyRepository;
@@ -36,17 +37,17 @@ public class AdminService {
         this.customerRepository = customerRepository;
     }
 
-    public void createCompany(Company company) throws CouponSystemException {
+    public void createCompany(Company company) throws CompanyNameDuplicateException {
         this.isCompanyNameDuplicate(company.getName());
         companyRepository.save(company);
     }
 
-    public Company getCompanyById(int companyId) throws CouponSystemException {
+    public Company getCompanyById(int companyId) throws CompanyNotExistsException {
         this.isCompanyExists(companyId);
         return companyRepository.findById(companyId);
     }
 
-    public Collection<Company> getAllCompanies() throws CouponSystemException {
+    public Collection<Company> getAllCompanies() throws CompanyNotExistsException {
 
         Collection<Company> companies = companyRepository.findAll();
 
@@ -58,7 +59,7 @@ public class AdminService {
         }
     }
 
-    public void updateCompany(Company company) throws CouponSystemException {
+    public void updateCompany(Company company) throws CompanyNameDuplicateException, CompanyNotExistsException {
         this.isCompanyExists(company.getId());
         this.isCompanyNameDuplicate(company.getName());
         companyRepository.save(company);
@@ -68,7 +69,7 @@ public class AdminService {
         companyRepository.deleteById(id);
     }
 
-    public void createCoupon(Coupon coupon) throws CouponSystemException {
+    public void createCoupon(Coupon coupon) throws CompanyNotExistsException, CouponTitleDuplicateException {
         this.isCompanyExists(coupon.getCompanyId());
         CompanyService.createCoupon(coupon, couponRepository, companyRepository, coupon.getCompanyId());
     }
@@ -78,7 +79,7 @@ public class AdminService {
         return couponRepository.findById(couponId);
     }
 
-    public Collection<Coupon> getAllCoupons() throws CouponSystemException {
+    public Collection<Coupon> getAllCoupons() throws CouponNotExistsException {
 
         Collection<Coupon> coupons = couponRepository.findAll();
 
@@ -152,7 +153,7 @@ public class AdminService {
     }
 
     // Checking if company exists in database
-    private void isCompanyExists(int companyID) throws CouponSystemException {
+    private void isCompanyExists(int companyID) throws CompanyNotExistsException {
         Optional<Company> isCompanyExists = Optional.ofNullable(companyRepository.findById(companyID));
         if (!isCompanyExists.isPresent()) {
             throw new CompanyNotExistsException("This company doesn't exist.");
@@ -160,15 +161,15 @@ public class AdminService {
     }
 
     // Checking if coupon exists in database
-    static void isCouponExists(int couponId, CouponRepository couponRepository) throws CouponSystemException {
+    static void isCouponExists(int couponId, CouponRepository couponRepository) throws CouponNotExistsException {
         Optional<Coupon> isCouponExists = Optional.ofNullable(couponRepository.findById(couponId));
         if (!isCouponExists.isPresent()) {
-            throw new CustomerNotExistsException("This coupon doesn't exist.");
+            throw new CouponNotExistsException("This coupon doesn't exist.");
         }
     }
 
     // Checking if customer exists in database
-    private void isCustomerExists(int customerID) throws CouponSystemException {
+    private void isCustomerExists(int customerID) throws CustomerNotExistsException {
         Optional<Customer> isCustomerExists = Optional.ofNullable(customerRepository.findById(customerID));
         if (!isCustomerExists.isPresent()) {
             throw new CustomerNotExistsException("This customer doesn't exist.");
@@ -176,7 +177,7 @@ public class AdminService {
     }
 
     // Checking if name of the new company is not duplicate
-    private void isCompanyNameDuplicate(String companyName) throws CouponSystemException {
+    private void isCompanyNameDuplicate(String companyName) throws CompanyNameDuplicateException {
         Optional<Company> isCompanyNameDuplicate = Optional
                 .ofNullable(companyRepository.findByName(companyName));
         if (isCompanyNameDuplicate.isPresent()) {
@@ -186,7 +187,7 @@ public class AdminService {
     }
 
     // Checking if name of the new customer is not duplicate
-    private void isCustomerNameDuplicate(String customerName) throws CouponSystemException {
+    private void isCustomerNameDuplicate(String customerName) throws CustomerNameDuplicateException {
         Optional<Customer> isCustomerNameDuplicate = Optional
                 .ofNullable(customerRepository.findByName(customerName));
         if (isCustomerNameDuplicate.isPresent()) {

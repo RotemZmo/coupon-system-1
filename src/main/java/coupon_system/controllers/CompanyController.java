@@ -1,7 +1,9 @@
 package coupon_system.controllers;
 
 import coupon_system.entities.Coupon;
+import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
+import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
 import coupon_system.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,11 +44,31 @@ public class CompanyController {
     }
 
     @RequestMapping(path = "coupon", method = RequestMethod.GET)
-    public ResponseEntity<?> getAllCoupons() {
+    public ResponseEntity<?> getAllCompanyCoupons() {
         try {
             Collection<Coupon> coupons = companyService.getAllCompanyCoupons();
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "coupon-by-type/{type}", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllCompanyCouponsByType(@PathVariable("type") CouponType couponType) {
+        try {
+            Collection<Coupon> coupons = companyService.getAllCompanyCouponsByType(couponType);
+            return new ResponseEntity<>(coupons, HttpStatus.OK);
+        } catch (CompanyDoesntOwnCoupon e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "coupon-by-price/{price}", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllCompanyCouponsByPrice(@PathVariable("price") double price) {
+        try {
+            Collection<Coupon> coupons = companyService.getAllCompanyCouponsByPrice(price);
+            return new ResponseEntity<>(coupons, HttpStatus.OK);
+        } catch (CompanyDoesntOwnCoupon e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

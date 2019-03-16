@@ -16,6 +16,9 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     @Query("SELECT DISTINCT c FROM Coupon c WHERE UPPER(c.title) LIKE UPPER(?1)")
     Coupon findByTitle(String title);
 
+    @Query("SELECT c FROM Coupon c WHERE c.amount > 0")
+    Collection<Coupon> fingAllAvailableCoupons();
+
     @Query("DELETE FROM Coupon c WHERE c.endDate < CURRENT_DATE")
     void deleteExpiredCoupons();
 
@@ -37,15 +40,16 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     /**
      * Queries for coupons of the customer
      */
-//    @Query("SELECT c FROM Coupon c WHERE c.id IN (SELECT coupons.id FROM customer_coupons WHERE coupons_id = ?1 AND customer_id = ?2)")
-//    Coupon findCustomerCoupon(int couponId, int customerId);
-    @Query("SELECT c FROM Coupon c WHERE company_id = ?1")
+    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.id = ?2")
+    Coupon findCustomerCoupon(int customerId, int couponId);
+
+    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1")
     Collection<Coupon> findAllCustomerCoupons(int customerId);
 
-    @Query("SELECT c FROM Coupon c WHERE company_id = ?1 AND c.couponType = ?2")
+    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.couponType = ?2")
     Collection<Coupon> findAllCustomerCouponsByType(int customerId, CouponType couponType);
 
-    @Query("SELECT c FROM Coupon c WHERE company_id = ?1 AND c.price <= ?2")
+    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.price <= ?2")
     Collection<Coupon> findAllCustomerCouponsByPrice(int customerId, double price);
 
 }
