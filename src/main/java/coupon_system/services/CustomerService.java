@@ -5,7 +5,6 @@ import coupon_system.entities.Customer;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
-import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
 import coupon_system.exceptions.couponExceptions.CouponUnavaliableException;
 import coupon_system.exceptions.customerExceptions.CustomerAlreadyHasCouponException;
@@ -99,7 +98,7 @@ public class CustomerService {
 
     public Collection<Coupon> getAllAvailableCoupons() throws CouponUnavaliableException {
 
-        Collection<Coupon> coupons = couponRepository.fingAllAvailableCoupons();
+        Collection<Coupon> coupons = couponRepository.findAllAvailableCoupons();
 
         if (!coupons.isEmpty()) {
             return coupons;

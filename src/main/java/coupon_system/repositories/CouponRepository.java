@@ -17,7 +17,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     Coupon findByTitle(String title);
 
     @Query("SELECT c FROM Coupon c WHERE c.amount > 0")
-    Collection<Coupon> fingAllAvailableCoupons();
+    Collection<Coupon> findAllAvailableCoupons();
 
     @Query("DELETE FROM Coupon c WHERE c.endDate < CURRENT_DATE")
     void deleteExpiredCoupons();
