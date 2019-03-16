@@ -6,7 +6,6 @@ import coupon_system.exceptions.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-// Service for registration
 @Component
 public class RegistrationService {
 
