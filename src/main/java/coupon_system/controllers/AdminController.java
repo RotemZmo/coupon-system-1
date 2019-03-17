@@ -33,7 +33,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "companyById/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "company-by-id/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getCompanyById(@PathVariable("id") int companyId) {
         try {
             Company company = adminService.getCompanyById(companyId);
@@ -79,7 +79,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "couponById/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupon-by-id/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getCouponById(@PathVariable("id") int couponId) {
         try {
             Coupon coupon = adminService.getCouponById(couponId);
@@ -125,7 +125,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "customerById/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "customer-by-id/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getCustomerById(@PathVariable("id") int customerId) {
         try {
             Customer customer = adminService.getCustomerById(customerId);

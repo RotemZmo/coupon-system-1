@@ -33,7 +33,7 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "couponById/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupon-by-id/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getCompanyCoupon(@PathVariable("id") int couponId) {
         try {
             Coupon coupon = companyService.getCompanyCoupon(couponId);
