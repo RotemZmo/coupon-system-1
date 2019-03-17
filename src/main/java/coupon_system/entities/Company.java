@@ -20,7 +20,7 @@ public class Company implements Serializable, Comparable<Company> {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private Collection<Coupon> coupons;
 
     public Company() {

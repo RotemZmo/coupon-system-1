@@ -16,7 +16,7 @@ import java.util.Collection;
 @RequestMapping("company")
 public class CompanyController {
 
-    private CompanyService companyService;
+    private final CompanyService companyService;
 
     @Autowired
     public CompanyController(CompanyService companyService) {

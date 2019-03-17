@@ -8,6 +8,7 @@ import coupon_system.exceptions.CouponSystemException;
 import coupon_system.services.AdminService;
 import coupon_system.services.CompanyService;
 import coupon_system.services.CustomerService;
+import coupon_system.tasks.DailyCouponExpirationTask;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

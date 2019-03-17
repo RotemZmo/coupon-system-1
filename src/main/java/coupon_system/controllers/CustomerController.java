@@ -20,7 +20,7 @@ import java.util.Collection;
 @RequestMapping("customer")
 public class CustomerController {
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     @Autowired
     public CustomerController(CustomerService customerService) {

@@ -3,6 +3,7 @@ package coupon_system.services;
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
+import coupon_system.enums.ClientType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.companyExceptions.CompanyNameDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNotExistsException;
@@ -22,7 +23,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Component
-public class AdminService {
+public class AdminService implements CouponClientService {
 
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
@@ -65,8 +66,8 @@ public class AdminService {
         companyRepository.save(company);
     }
 
-    public void deleteCompany(int id) {
-        companyRepository.deleteById(id);
+    public void deleteCompany(int companyId) {
+        companyRepository.deleteById(companyId);
     }
 
     public void createCoupon(Coupon coupon) throws CompanyNotExistsException, CouponTitleDuplicateException {
@@ -116,8 +117,8 @@ public class AdminService {
         }
     }
 
-    public void deleteCoupon(int id) {
-        couponRepository.deleteById(id);
+    public void deleteCoupon(int couponId) {
+        couponRepository.deleteById(couponId);
     }
 
     public void createCustomer(Customer customer) throws CouponSystemException {
@@ -148,13 +149,18 @@ public class AdminService {
         customerRepository.save(customer);
     }
 
-    public void deleteCustomer(int id) {
-        customerRepository.deleteById(id);
+    public void deleteCustomer(int customerId) {
+        customerRepository.deleteById(customerId);
+    }
+
+    @Override
+    public CouponClientService login(String username, String password, ClientType clientType) {
+        return null;
     }
 
     // Checking if company exists in database
-    private void isCompanyExists(int companyID) throws CompanyNotExistsException {
-        Optional<Company> isCompanyExists = Optional.ofNullable(companyRepository.findById(companyID));
+    private void isCompanyExists(int companyId) throws CompanyNotExistsException {
+        Optional<Company> isCompanyExists = Optional.ofNullable(companyRepository.findById(companyId));
         if (!isCompanyExists.isPresent()) {
             throw new CompanyNotExistsException("This company doesn't exist.");
         }
@@ -169,8 +175,8 @@ public class AdminService {
     }
 
     // Checking if customer exists in database
-    private void isCustomerExists(int customerID) throws CustomerNotExistsException {
-        Optional<Customer> isCustomerExists = Optional.ofNullable(customerRepository.findById(customerID));
+    private void isCustomerExists(int customerId) throws CustomerNotExistsException {
+        Optional<Customer> isCustomerExists = Optional.ofNullable(customerRepository.findById(customerId));
         if (!isCustomerExists.isPresent()) {
             throw new CustomerNotExistsException("This customer doesn't exist.");
         }
@@ -196,7 +202,5 @@ public class AdminService {
         }
     }
 
-    public void deletExp() {
-        couponRepository.deleteExpiredCoupons();
-    }
+
 }

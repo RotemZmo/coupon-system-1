@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class DailyCouponExpirationTask implements Runnable {
 
-    private CouponRepository couponRepository;
+    private final CouponRepository couponRepository;
 
     @Autowired
     public DailyCouponExpirationTask(CouponRepository couponRepository) {

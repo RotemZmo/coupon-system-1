@@ -2,6 +2,7 @@ package coupon_system.services;
 
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
+import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
@@ -19,14 +20,15 @@ import java.util.Date;
 import java.util.Optional;
 
 @Component
-public class CustomerService {
+public class CustomerService implements CouponClientService {
 
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
     private int loggedCustomer;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, CouponRepository couponRepository) {
+    public CustomerService(CustomerRepository customerRepository,
+                           CouponRepository couponRepository) {
         this.customerRepository = customerRepository;
         this.couponRepository = couponRepository;
     }
@@ -105,14 +107,9 @@ public class CustomerService {
         }
     }
 
-    public boolean login(String name, String password) throws CouponSystemException {
-        Optional<Customer> canLogin = Optional.ofNullable(customerRepository.login(name, password));
-        if (canLogin.isPresent()) {
-            loggedCustomer = canLogin.get().getId();
-            return true;
-        } else {
-            throw new LoginFailedException("Login failed, please try again.");
-        }
+    @Override
+    public CouponClientService login(String username, String password, ClientType clientType) {
+        return null;
     }
 
     // Checking if customer already has a coupon
@@ -120,6 +117,19 @@ public class CustomerService {
         Optional<Coupon> isCustomerHasCoupon = Optional.ofNullable(couponRepository.findCustomerCoupon(loggedCustomer, couponId));
         if (isCustomerHasCoupon.isPresent()) {
             throw new CustomerAlreadyHasCouponException("You already have this coupon.");
+        }
+    }
+
+    /**
+     * FAKE LOGIN
+     */
+    public boolean login(String name, String password) throws CouponSystemException {
+        Optional<Customer> canLogin = Optional.ofNullable(customerRepository.login(name, password));
+        if (canLogin.isPresent()) {
+            loggedCustomer = canLogin.get().getId();
+            return true;
+        } else {
+            throw new LoginFailedException("Login failed, please try again.");
         }
     }
 }

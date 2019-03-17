@@ -1,26 +1,26 @@
 package coupon_system.services;
 
 import coupon_system.enums.ClientType;
+import coupon_system.exceptions.LoginFailedException;
 import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LoginService {
 
-    private CompanyRepository companyRepository;
-    private CustomerRepository customerRepository;
+    private final CompanyRepository companyRepository;
+    private final CustomerRepository customerRepository;
 
     @Autowired
-    public LoginService(CompanyRepository companyRepository, CustomerRepository customerRepository) {
+    public LoginService(CompanyRepository companyRepository,
+                        CustomerRepository customerRepository) {
         this.companyRepository = companyRepository;
         this.customerRepository = customerRepository;
     }
 
-    public ResponseEntity<?> login(User user) {
+    public CouponClientService login(User user) throws LoginFailedException {
 
         switch (user.getClientType()) {
             case ADMIN:
@@ -30,7 +30,7 @@ public class LoginService {
             case CUSTOMER:
 
             default:
-                return new ResponseEntity<>("Login failed, please try again.", HttpStatus.BAD_REQUEST);
+                throw new LoginFailedException("Login failed, please try again.");
         }
     }
 }

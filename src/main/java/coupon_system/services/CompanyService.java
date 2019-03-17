@@ -2,6 +2,7 @@ package coupon_system.services;
 
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
+import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
@@ -19,14 +20,15 @@ import java.util.Date;
 import java.util.Optional;
 
 @Component
-public class CompanyService {
+public class CompanyService implements CouponClientService {
 
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private int loggedCompany;
 
     @Autowired
-    public CompanyService(CompanyRepository companyRepository, CouponRepository couponRepository) {
+    public CompanyService(CompanyRepository companyRepository,
+                          CouponRepository couponRepository) {
         this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
     }
@@ -104,9 +106,9 @@ public class CompanyService {
         }
     }
 
-    public void deleteCoupon(int id) throws CompanyDoesntOwnCoupon {
-        this.isCompanyOwnsCoupon(id);
-        couponRepository.deleteById(id);
+    public void deleteCoupon(int couponId) throws CompanyDoesntOwnCoupon {
+        this.isCompanyOwnsCoupon(couponId);
+        couponRepository.deleteById(couponId);
     }
 
     static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, int loggedCompany) throws CouponTitleDuplicateException {
@@ -115,14 +117,9 @@ public class CompanyService {
         couponRepository.save(coupon);
     }
 
-    public boolean login(String name, String password) throws CouponSystemException {
-        Optional<Company> canLogin = Optional.ofNullable(companyRepository.login(name, password));
-        if (canLogin.isPresent()) {
-            loggedCompany = canLogin.get().getId();
-            return true;
-        } else {
-            throw new LoginFailedException("Login failed, please try again.");
-        }
+    @Override
+    public CouponClientService login(String username, String password, ClientType clientType) {
+        return null;
     }
 
     // Checking if title of the new coupon is not duplicate
@@ -144,5 +141,18 @@ public class CompanyService {
         }
     }
 
+    /**
+     * FAKE LOGIN
+     */
+    public boolean login(String name, String password) throws CouponSystemException {
+
+        Optional<Company> canLogin = Optional.ofNullable(companyRepository.login(name, password));
+        if (canLogin.isPresent()) {
+            loggedCompany = canLogin.get().getId();
+            return true;
+        } else {
+            throw new LoginFailedException("Login failed, please try again.");
+        }
+    }
 }
 
