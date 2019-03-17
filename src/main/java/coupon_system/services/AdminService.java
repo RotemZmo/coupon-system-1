@@ -196,4 +196,7 @@ public class AdminService {
         }
     }
 
+    public void deletExp() {
+        couponRepository.deleteExpiredCoupons();
+    }
 }

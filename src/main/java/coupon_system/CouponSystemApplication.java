@@ -43,7 +43,7 @@ public class CouponSystemApplication {
     /**
      * CUSTOMER
      */
-    static Customer customer = new Customer("Cust1", "111", "cust1@gmail.com");
+    static Customer customer = new Customer("cust", "cust", "cust@gmail.com");
     static Customer customerUpd = new Customer(10, "Cust666", "666", "cust666@gmail.com");
 
     /**

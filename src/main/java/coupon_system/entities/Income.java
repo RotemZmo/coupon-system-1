@@ -15,12 +15,16 @@ public class Income implements Serializable, Comparable<Income> {
     @Id
     @GeneratedValue
     private int id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private Date date;
+
     @Column(nullable = false)
     private IncomeType description;
+
     @Column(nullable = false)
     private double amount;
 

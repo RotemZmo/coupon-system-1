@@ -10,13 +10,20 @@ public class Customer implements Serializable, Comparable<Customer> {
     @Id
     @GeneratedValue
     private int id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String password;
+
     @Column(nullable = false)
     private String email;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "customer_coupon",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "coupon_id"))
     private Collection<Coupon> coupons;
 
     public Customer() {
@@ -86,10 +93,6 @@ public class Customer implements Serializable, Comparable<Customer> {
 
     public void setCoupons(Collection<Coupon> coupons) {
         this.coupons = coupons;
-    }
-
-    public void purchaseCoupon(Coupon coupon) {
-        this.coupons.add(coupon);
     }
 
     @Override

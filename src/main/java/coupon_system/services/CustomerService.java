@@ -49,9 +49,7 @@ public class CustomerService {
 
                 coupon.setAmount(coupon.getAmount() - 1);
                 couponRepository.save(coupon);
-                Customer customer = customerRepository.findById(loggedCustomer);
-                customer.purchaseCoupon(couponRepository.findById(couponId));
-                customerRepository.save(customer);
+                customerRepository.purchaseCoupon(loggedCustomer, couponId);
             } else {
                 throw new CouponUnavaliableException("This coupon is not available");
             }

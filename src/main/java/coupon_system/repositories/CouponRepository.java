@@ -3,8 +3,10 @@ package coupon_system.repositories;
 import coupon_system.entities.Coupon;
 import coupon_system.enums.CouponType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -19,7 +21,9 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     @Query("SELECT c FROM Coupon c WHERE c.amount > 0")
     Collection<Coupon> findAllAvailableCoupons();
 
-    @Query("DELETE FROM Coupon c WHERE c.endDate < CURRENT_DATE")
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Coupon c WHERE c.endDate < CURRENT_DATE ")
     void deleteExpiredCoupons();
 
     /**

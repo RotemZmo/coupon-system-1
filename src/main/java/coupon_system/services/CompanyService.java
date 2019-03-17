@@ -109,10 +109,6 @@ public class CompanyService {
         couponRepository.deleteById(id);
     }
 
-    public void deleteExpiredCoupons() {
-        couponRepository.deleteExpiredCoupons();
-    }
-
     static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, int loggedCompany) throws CouponTitleDuplicateException {
         isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
         coupon.setCompany(companyRepository.findById(loggedCompany));

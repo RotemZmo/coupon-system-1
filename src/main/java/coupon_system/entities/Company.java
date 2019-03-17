@@ -10,12 +10,16 @@ public class Company implements Serializable, Comparable<Company> {
     @Id
     @GeneratedValue
     private int id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String password;
+
     @Column(nullable = false)
     private String email;
+
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Coupon> coupons;
 

@@ -13,28 +13,41 @@ public class Coupon implements Serializable, Comparable<Coupon> {
     @Id
     @GeneratedValue
     private int id;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date startDate;
+
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date endDate;
+
     @Column(nullable = false)
     private int amount;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CouponType couponType;
+
     @Column(nullable = false)
     private String message;
+
     @Column(nullable = false)
     private double price;
+
     @Column(nullable = false)
     private String image;
+
     @ManyToOne
     private Company company;
-    @ManyToMany(mappedBy = "coupons")
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "customer_coupon",
+            joinColumns = @JoinColumn(name = "coupon_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id"))
     private Collection<Customer> customers;
 
     public Coupon() {
