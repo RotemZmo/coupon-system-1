@@ -2,7 +2,6 @@ package coupon_system.services;
 
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
-import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
@@ -13,14 +12,14 @@ import coupon_system.exceptions.customerExceptions.CustomerDoesntOwnCoupon;
 import coupon_system.repositories.CouponRepository;
 import coupon_system.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
-@Component
-public class CustomerService implements CouponClientService {
+@Service
+public class CustomerService extends CouponClientService {
 
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
@@ -31,6 +30,18 @@ public class CustomerService implements CouponClientService {
                            CouponRepository couponRepository) {
         this.customerRepository = customerRepository;
         this.couponRepository = couponRepository;
+    }
+
+    @Override
+    public CouponClientService login(String username,
+                                     String password) throws LoginFailedException {
+        Optional<Customer> loginCheck = Optional.ofNullable(customerRepository.login(username, password));
+        if (loginCheck.isPresent()) {
+            loggedCustomer = loginCheck.get().getId();
+            return this;
+        } else {
+            throw new LoginFailedException("Authorization is failed, please try again.");
+        }
     }
 
     public void purchaseCoupon(int couponId) throws CouponSystemException {
@@ -107,11 +118,6 @@ public class CustomerService implements CouponClientService {
         }
     }
 
-    @Override
-    public CouponClientService login(String username, String password, ClientType clientType) {
-        return null;
-    }
-
     // Checking if customer already has a coupon
     private void isCustomerHasCoupon(int couponId) throws CustomerAlreadyHasCouponException {
         Optional<Coupon> isCustomerHasCoupon = Optional.ofNullable(couponRepository.findCustomerCoupon(loggedCustomer, couponId));
@@ -123,7 +129,7 @@ public class CustomerService implements CouponClientService {
     /**
      * FAKE LOGIN
      */
-    public boolean login(String name, String password) throws CouponSystemException {
+    public boolean fakeLogin(String name, String password) throws CouponSystemException {
         Optional<Customer> canLogin = Optional.ofNullable(customerRepository.login(name, password));
         if (canLogin.isPresent()) {
             loggedCustomer = canLogin.get().getId();

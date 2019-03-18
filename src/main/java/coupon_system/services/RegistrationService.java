@@ -4,9 +4,9 @@ import coupon_system.entities.Company;
 import coupon_system.entities.Customer;
 import coupon_system.exceptions.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class RegistrationService {
 
     private final AdminService adminService;

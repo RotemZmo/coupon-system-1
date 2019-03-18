@@ -2,7 +2,6 @@ package coupon_system.services;
 
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
-import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
@@ -13,14 +12,14 @@ import coupon_system.exceptions.couponExceptions.CouponUnavaliableException;
 import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
-@Component
-public class CompanyService implements CouponClientService {
+@Service
+public class CompanyService extends CouponClientService {
 
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
@@ -31,6 +30,18 @@ public class CompanyService implements CouponClientService {
                           CouponRepository couponRepository) {
         this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
+    }
+
+    @Override
+    public CouponClientService login(String username,
+                                     String password) throws LoginFailedException {
+        Optional<Company> loginCheck = Optional.ofNullable(companyRepository.login(username, password));
+        if (loginCheck.isPresent()) {
+            loggedCompany = loginCheck.get().getId();
+            return this;
+        } else {
+            throw new LoginFailedException("Authorization is failed, please try again.");
+        }
     }
 
     public void createCoupon(Coupon coupon) throws CouponTitleDuplicateException {
@@ -117,11 +128,6 @@ public class CompanyService implements CouponClientService {
         couponRepository.save(coupon);
     }
 
-    @Override
-    public CouponClientService login(String username, String password, ClientType clientType) {
-        return null;
-    }
-
     // Checking if title of the new coupon is not duplicate
     static void isCouponTitleDuplicate(String couponTitle, CouponRepository couponRepository) throws CouponTitleDuplicateException {
         Optional<Coupon> isCouponTitleDuplicate = Optional
@@ -144,7 +150,7 @@ public class CompanyService implements CouponClientService {
     /**
      * FAKE LOGIN
      */
-    public boolean login(String name, String password) throws CouponSystemException {
+    public boolean fakeLogin(String name, String password) throws CouponSystemException {
 
         Optional<Company> canLogin = Optional.ofNullable(companyRepository.login(name, password));
         if (canLogin.isPresent()) {

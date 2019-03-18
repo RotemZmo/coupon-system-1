@@ -1,9 +1,10 @@
 package coupon_system.services;
 
-import coupon_system.enums.ClientType;
-import org.springframework.stereotype.Component;
+import coupon_system.exceptions.LoginFailedException;
+import org.springframework.stereotype.Service;
 
-@Component
-public interface CouponClientService {
-    CouponClientService login(String username, String password, ClientType clientType);
+@Service
+public abstract class CouponClientService {
+    public abstract CouponClientService login(String username,
+                                              String password) throws LoginFailedException;
 }

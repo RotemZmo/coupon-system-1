@@ -3,12 +3,13 @@ package coupon_system;
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
+import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
+import coupon_system.main_app.CouponSystem;
 import coupon_system.services.AdminService;
 import coupon_system.services.CompanyService;
 import coupon_system.services.CustomerService;
-import coupon_system.tasks.DailyCouponExpirationTask;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -21,14 +22,10 @@ public class CouponSystemApplication {
     public static void main(String[] args) throws CouponSystemException {
 //        SpringApplication.run(CouponSystemApplication.class, args);
         ConfigurableApplicationContext context = SpringApplication.run(CouponSystemApplication.class, args);
-        AdminService adminService = (AdminService) context.getBean("adminService");
-        CompanyService companyService = context.getBean("companyService", CompanyService.class);
-        CustomerService customerService = context.getBean("customerService", CustomerService.class);
-        /**
-         * LOGGED COMPANY & CUSTOMER
-         * */
-        companyService.login("comp", "comp");
-        customerService.login("cust", "cust");
+        CouponSystem couponSystem = context.getBean("couponSystem", CouponSystem.class);
+        AdminService admin = (AdminService) couponSystem.login("admin", "admin", ClientType.ADMIN);
+        CompanyService company = (CompanyService) couponSystem.login("comp", "comp", ClientType.COMPANY);
+        CustomerService customer = (CustomerService) couponSystem.login("cust", "cust", ClientType.CUSTOMER);
         /**
          *
          * */

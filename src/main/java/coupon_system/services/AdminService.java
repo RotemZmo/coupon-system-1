@@ -3,8 +3,8 @@ package coupon_system.services;
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
-import coupon_system.enums.ClientType;
 import coupon_system.exceptions.CouponSystemException;
+import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.companyExceptions.CompanyNameDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
@@ -16,14 +16,14 @@ import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CouponRepository;
 import coupon_system.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
-@Component
-public class AdminService implements CouponClientService {
+@Service
+public class AdminService extends CouponClientService {
 
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
@@ -36,6 +36,16 @@ public class AdminService implements CouponClientService {
         this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
         this.customerRepository = customerRepository;
+    }
+
+    @Override
+    public CouponClientService login(String username,
+                                     String password) throws LoginFailedException {
+        if (username.equalsIgnoreCase("admin") && password.equals("admin")) {
+            return this;
+        } else {
+            throw new LoginFailedException("Authorization is failed, please try again.");
+        }
     }
 
     public void createCompany(Company company) throws CompanyNameDuplicateException {
@@ -151,11 +161,6 @@ public class AdminService implements CouponClientService {
 
     public void deleteCustomer(int customerId) {
         customerRepository.deleteById(customerId);
-    }
-
-    @Override
-    public CouponClientService login(String username, String password, ClientType clientType) {
-        return null;
     }
 
     // Checking if company exists in database
