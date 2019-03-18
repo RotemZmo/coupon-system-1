@@ -41,7 +41,7 @@ public class AdminService extends CouponClientService {
     @Override
     public CouponClientService login(String username,
                                      String password) throws LoginFailedException {
-        if (username.equalsIgnoreCase("admin") && password.equals("admin")) {
+        if (username.equalsIgnoreCase("admin") && password.equals("1234")) {
             return this;
         } else {
             throw new LoginFailedException("Authorization is failed, please try again.");

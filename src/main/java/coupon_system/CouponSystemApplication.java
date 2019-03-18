@@ -3,13 +3,16 @@ package coupon_system;
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
+import coupon_system.entities.Income;
 import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
+import coupon_system.enums.IncomeType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.main_app.CouponSystem;
 import coupon_system.services.AdminService;
 import coupon_system.services.CompanyService;
 import coupon_system.services.CustomerService;
+import coupon_system.services.IncomeService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,9 +26,10 @@ public class CouponSystemApplication {
 //        SpringApplication.run(CouponSystemApplication.class, args);
         ConfigurableApplicationContext context = SpringApplication.run(CouponSystemApplication.class, args);
         CouponSystem couponSystem = context.getBean("couponSystem", CouponSystem.class);
-        AdminService admin = (AdminService) couponSystem.login("admin", "admin", ClientType.ADMIN);
-        CompanyService company = (CompanyService) couponSystem.login("comp", "comp", ClientType.COMPANY);
-        CustomerService customer = (CustomerService) couponSystem.login("cust", "cust", ClientType.CUSTOMER);
+        IncomeService incomeService = context.getBean("incomeService", IncomeService.class);
+        AdminService adminService = (AdminService) couponSystem.login("admin", "1234", ClientType.ADMIN);
+        CompanyService companyService = (CompanyService) couponSystem.login("comp", "comp", ClientType.COMPANY);
+        CustomerService customerService = (CustomerService) couponSystem.login("cust", "cust", ClientType.CUSTOMER);
         /**
          *
          * */
@@ -42,11 +46,16 @@ public class CouponSystemApplication {
      * CUSTOMER
      */
     static Customer customer = new Customer("cust", "cust", "cust@gmail.com");
-    static Customer customerUpd = new Customer(10, "Cust666", "666", "cust666@gmail.com");
+    static Customer customerUpd = new Customer(21, "Cust666", "666", "cust666@gmail.com");
 
     /**
      * COUPON
      */
-    static Coupon coupon = new Coupon("Coupon4", new Date(0), new Date(0), 10, CouponType.CAMPING, "coup", 10, "coup");
-    static Coupon couponUpd = new Coupon(11, "Coupon1", new Date(0), new Date(System.currentTimeMillis() + 100000), 100, CouponType.CAMPING, "coup", 100, "coup");
+    static Coupon coupon = new Coupon("Coupon41", new Date(0), new Date(0), 10, CouponType.CAMPING, "coup", 10, "coup");
+    static Coupon couponUpd = new Coupon(21, "Coupon1sss", new Date(0), new Date(System.currentTimeMillis() + 100000), 100, CouponType.CAMPING, "coup", 100, "coup");
+
+    /**
+     * INCOME
+     */
+    static Income income = new Income(company, new Date(System.currentTimeMillis()), IncomeType.CUSTOMER_PURCHASE, 10);
 }

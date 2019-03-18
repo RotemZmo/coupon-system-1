@@ -26,6 +26,9 @@ public class Customer implements Serializable, Comparable<Customer> {
             inverseJoinColumns = @JoinColumn(name = "coupon_id"))
     private Collection<Coupon> coupons;
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
+    private Collection<Income> incomes;
+
     public Customer() {
     }
 

@@ -2,7 +2,9 @@ package coupon_system.services;
 
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
+import coupon_system.entities.Income;
 import coupon_system.enums.CouponType;
+import coupon_system.enums.IncomeType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
@@ -23,13 +25,16 @@ public class CustomerService extends CouponClientService {
 
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
-    private int loggedCustomer;
+    private final IncomeService incomeService;
+    private Customer loggedCustomer;
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository,
-                           CouponRepository couponRepository) {
+                           CouponRepository couponRepository,
+                           IncomeService incomeService) {
         this.customerRepository = customerRepository;
         this.couponRepository = couponRepository;
+        this.incomeService = incomeService;
     }
 
     @Override
@@ -37,7 +42,7 @@ public class CustomerService extends CouponClientService {
                                      String password) throws LoginFailedException {
         Optional<Customer> loginCheck = Optional.ofNullable(customerRepository.login(username, password));
         if (loginCheck.isPresent()) {
-            loggedCustomer = loginCheck.get().getId();
+            loggedCustomer = loginCheck.get();
             return this;
         } else {
             throw new LoginFailedException("Authorization is failed, please try again.");
@@ -60,9 +65,12 @@ public class CustomerService extends CouponClientService {
             // Checking amount of the coupon
             if (coupon.getAmount() > 0) {
 
+                Income income = new Income(loggedCustomer, new Date(System.currentTimeMillis()), IncomeType.CUSTOMER_PURCHASE, coupon.getPrice());
+                incomeService.storeIncome(income);
+
                 coupon.setAmount(coupon.getAmount() - 1);
                 couponRepository.save(coupon);
-                customerRepository.purchaseCoupon(loggedCustomer, couponId);
+                customerRepository.purchaseCoupon(loggedCustomer.getId(), couponId);
             } else {
                 throw new CouponUnavaliableException("This coupon is not available");
             }
@@ -73,7 +81,7 @@ public class CustomerService extends CouponClientService {
 
     public Collection<Coupon> getPurchasedCoupons() throws CustomerDoesntOwnCoupon {
 
-        Collection<Coupon> coupons = couponRepository.findAllCustomerCoupons(loggedCustomer);
+        Collection<Coupon> coupons = couponRepository.findAllCustomerCoupons(loggedCustomer.getId());
 
         // Checking if customer owns at least one coupon
         if (!coupons.isEmpty()) {
@@ -85,7 +93,7 @@ public class CustomerService extends CouponClientService {
 
     public Collection<Coupon> getPurchasedCouponsByType(CouponType couponType) throws CustomerDoesntOwnCoupon {
 
-        Collection<Coupon> coupons = couponRepository.findAllCustomerCouponsByType(loggedCustomer, couponType);
+        Collection<Coupon> coupons = couponRepository.findAllCustomerCouponsByType(loggedCustomer.getId(), couponType);
 
         // Checking if customer owns at least one coupon by specified type
         if (!coupons.isEmpty()) {
@@ -97,7 +105,7 @@ public class CustomerService extends CouponClientService {
 
     public Collection<Coupon> getPurchasedCouponsByPrice(double price) throws CustomerDoesntOwnCoupon {
 
-        Collection<Coupon> coupons = couponRepository.findAllCustomerCouponsByPrice(loggedCustomer, price);
+        Collection<Coupon> coupons = couponRepository.findAllCustomerCouponsByPrice(loggedCustomer.getId(), price);
 
         // Checking if customer owns at least one coupon by specified price
         if (!coupons.isEmpty()) {
@@ -120,22 +128,9 @@ public class CustomerService extends CouponClientService {
 
     // Checking if customer already has a coupon
     private void isCustomerHasCoupon(int couponId) throws CustomerAlreadyHasCouponException {
-        Optional<Coupon> isCustomerHasCoupon = Optional.ofNullable(couponRepository.findCustomerCoupon(loggedCustomer, couponId));
+        Optional<Coupon> isCustomerHasCoupon = Optional.ofNullable(couponRepository.findCustomerCoupon(loggedCustomer.getId(), couponId));
         if (isCustomerHasCoupon.isPresent()) {
             throw new CustomerAlreadyHasCouponException("You already have this coupon.");
-        }
-    }
-
-    /**
-     * FAKE LOGIN
-     */
-    public boolean fakeLogin(String name, String password) throws CouponSystemException {
-        Optional<Customer> canLogin = Optional.ofNullable(customerRepository.login(name, password));
-        if (canLogin.isPresent()) {
-            loggedCustomer = canLogin.get().getId();
-            return true;
-        } else {
-            throw new LoginFailedException("Login failed, please try again.");
         }
     }
 }

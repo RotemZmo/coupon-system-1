@@ -2,10 +2,7 @@ package coupon_system.entities;
 
 import coupon_system.enums.IncomeType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,20 +13,44 @@ public class Income implements Serializable, Comparable<Income> {
     @GeneratedValue
     private int id;
 
-    @Column(nullable = false)
-    private String name;
+    @ManyToOne
+    private Company company;
+
+    @ManyToOne
+    private Customer customer;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private IncomeType description;
 
     @Column(nullable = false)
     private double amount;
 
-    public Income() {
+    public Income(Company company,
+                  Date date,
+                  IncomeType description,
+                  double amount) {
+        this.company = company;
+        this.date = date;
+        this.description = description;
+        this.amount = amount;
+    }
 
+    public Income(Customer customer,
+                  Date date,
+                  IncomeType description,
+                  double amount) {
+        this.customer = customer;
+        this.date = date;
+        this.description = description;
+        this.amount = amount;
+    }
+
+    public Income() {
     }
 
     public int getId() {
@@ -40,12 +61,20 @@ public class Income implements Serializable, Comparable<Income> {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Date getDate() {
@@ -98,7 +127,8 @@ public class Income implements Serializable, Comparable<Income> {
     public String toString() {
         return "Income{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", company=" + company +
+                ", customer=" + customer +
                 ", date=" + date +
                 ", description=" + description +
                 ", amount=" + amount +

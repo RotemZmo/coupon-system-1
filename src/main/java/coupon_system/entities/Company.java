@@ -20,8 +20,11 @@ public class Company implements Serializable, Comparable<Company> {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
     private Collection<Coupon> coupons;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
+    private Collection<Income> incomes;
 
     public Company() {
     }
