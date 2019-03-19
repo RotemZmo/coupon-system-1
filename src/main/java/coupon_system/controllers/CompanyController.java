@@ -1,6 +1,7 @@
 package coupon_system.controllers;
 
 import coupon_system.entities.Coupon;
+import coupon_system.entities.Income;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
@@ -88,6 +89,16 @@ public class CompanyController {
         try {
             companyService.deleteCoupon(couponId);
             return new ResponseEntity<>("Coupon successfully deleted.", HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "income", method = RequestMethod.GET)
+    public ResponseEntity<?> getCompanyIncomes() {
+        try {
+            Collection<Income> incomes = companyService.getCompanyIncomes();
+            return new ResponseEntity<>(incomes, HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

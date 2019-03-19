@@ -10,7 +10,6 @@ import coupon_system.main_app.CouponSystem;
 import coupon_system.services.AdminService;
 import coupon_system.services.CompanyService;
 import coupon_system.services.CustomerService;
-import coupon_system.services.IncomeService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -24,15 +23,12 @@ public class CouponSystemApplication {
 //        SpringApplication.run(CouponSystemApplication.class, args);
         ConfigurableApplicationContext context = SpringApplication.run(CouponSystemApplication.class, args);
         CouponSystem couponSystem = context.getBean("couponSystem", CouponSystem.class);
-        IncomeService incomeService = context.getBean("incomeService", IncomeService.class);
         AdminService adminService = (AdminService) couponSystem.login("admin", "1234", ClientType.ADMIN);
         CompanyService companyService = (CompanyService) couponSystem.login("comp", "comp", ClientType.COMPANY);
         CustomerService customerService = (CustomerService) couponSystem.login("cust", "cust", ClientType.CUSTOMER);
         /**
          *
          * */
-
-        adminService.getCompanyById(123456);
 
     }
 

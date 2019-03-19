@@ -16,6 +16,8 @@ public class CouponSystem {
     private final AdminService adminService;
     private final CompanyService companyService;
     private final CustomerService customerService;
+    private final DailyCouponExpirationTask task;
+    private boolean firstCleaning = true;
 
     @Autowired
     public CouponSystem(AdminService adminService,
@@ -25,12 +27,15 @@ public class CouponSystem {
         this.adminService = adminService;
         this.companyService = companyService;
         this.customerService = customerService;
-        task.start();
+        this.task = task;
     }
 
     public CouponClientService login(String username,
                                      String password,
                                      ClientType clientType) throws LoginFailedException {
+        if (firstCleaning) task.start();
+        firstCleaning = false;
+
         switch (clientType) {
             case ADMIN:
                 return adminService.login(username, password);

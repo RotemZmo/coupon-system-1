@@ -13,6 +13,7 @@ import coupon_system.exceptions.customerExceptions.CustomerAlreadyHasCouponExcep
 import coupon_system.exceptions.customerExceptions.CustomerDoesntOwnCoupon;
 import coupon_system.repositories.CouponRepository;
 import coupon_system.repositories.CustomerRepository;
+import coupon_system.repositories.IncomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +26,16 @@ public class CustomerService extends CouponClientService {
 
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
-    private final IncomeService incomeService;
+    private final IncomeRepository incomeRepository;
     private Customer loggedCustomer;
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository,
                            CouponRepository couponRepository,
-                           IncomeService incomeService) {
+                           IncomeRepository incomeRepository) {
         this.customerRepository = customerRepository;
         this.couponRepository = couponRepository;
-        this.incomeService = incomeService;
+        this.incomeRepository = incomeRepository;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class CustomerService extends CouponClientService {
                 couponRepository.save(coupon);
                 customerRepository.purchaseCoupon(loggedCustomer.getId(), couponId);
 
-                incomeService.storeIncome(new Income(loggedCustomer,
+                incomeRepository.save(new Income(loggedCustomer,
                         new Date(System.currentTimeMillis()),
                         IncomeType.CUSTOMER_PURCHASE,
                         coupon.getPrice()));

@@ -4,6 +4,8 @@ import coupon_system.repositories.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 @Component
 public class DailyCouponExpirationTask extends Thread {
 
@@ -14,13 +16,15 @@ public class DailyCouponExpirationTask extends Thread {
         this.couponRepository = couponRepository;
     }
 
-    private boolean active = true;
-
     @Override
     public void run() {
-        while (active) {
-            couponRepository.deleteExpiredCoupons();
-            active = false;
+        while (true) {
+            try {
+                couponRepository.deleteExpiredCoupons();
+                TimeUnit.DAYS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package coupon_system.controllers;
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
+import coupon_system.entities.Income;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,5 +160,35 @@ public class AdminController {
     public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
         adminService.deleteCustomer(customerId);
         return new ResponseEntity<>("Customer successfully deleted.", HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "income", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllIncomes() {
+        try {
+            Collection<Income> incomes = adminService.getAllIncomes();
+            return new ResponseEntity<>(incomes, HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "company-income{companyId}/", method = RequestMethod.GET)
+    public ResponseEntity<?> getCompanyIncomes(@PathVariable long companyId) {
+        try {
+            Collection<Income> incomes = adminService.getCompanyIncomes(companyId);
+            return new ResponseEntity<>(incomes, HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "customer-income{customerId}/", method = RequestMethod.GET)
+    public ResponseEntity<?> getCustomerIncomes(@PathVariable long customerId) {
+        try {
+            Collection<Income> incomes = adminService.getCustomerIncomes(customerId);
+            return new ResponseEntity<>(incomes, HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

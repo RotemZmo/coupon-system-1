@@ -13,6 +13,7 @@ import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
 import coupon_system.exceptions.couponExceptions.CouponUnavaliableException;
 import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CouponRepository;
+import coupon_system.repositories.IncomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +26,16 @@ public class CompanyService extends CouponClientService {
 
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
-    private final IncomeService incomeService;
+    private final IncomeRepository incomeRepository;
     private Company loggedCompany;
 
     @Autowired
     public CompanyService(CompanyRepository companyRepository,
                           CouponRepository couponRepository,
-                          IncomeService incomeService) {
+                          IncomeRepository incomeRepository) {
         this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
-        this.incomeService = incomeService;
+        this.incomeRepository = incomeRepository;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class CompanyService extends CouponClientService {
 
     public void createCoupon(Coupon coupon) throws CouponTitleDuplicateException {
         createCoupon(coupon, couponRepository, companyRepository, loggedCompany.getId());
-        incomeService.storeIncome(new Income(loggedCompany,
+        incomeRepository.save(new Income(loggedCompany,
                 new Date(System.currentTimeMillis()),
                 IncomeType.COMPANY_NEW_COUPON,
                 100));
@@ -116,7 +117,7 @@ public class CompanyService extends CouponClientService {
 
                     couponRepository.save(updCoupon);
 
-                    incomeService.storeIncome(new Income(loggedCompany,
+                    incomeRepository.save(new Income(loggedCompany,
                             new Date(System.currentTimeMillis()),
                             IncomeType.COMPANY_UPDATE_COUPON,
                             10));
@@ -140,6 +141,18 @@ public class CompanyService extends CouponClientService {
         isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
         coupon.setCompany(companyRepository.findById(loggedCompany).get());
         couponRepository.save(coupon);
+    }
+
+    public Collection<Income> getCompanyIncomes() throws CouponSystemException {
+
+        Collection<Income> incomes = incomeRepository.findCompanyIncomes(loggedCompany.getId());
+
+        // Checking if at least one customer exists before getting all of them
+        if (!incomes.isEmpty()) {
+            return incomes;
+        } else {
+            throw new CouponSystemException("There are no incomes of the companies.");
+        }
     }
 
     // Checking if title of the new coupon is not duplicate

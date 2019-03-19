@@ -3,6 +3,7 @@ package coupon_system.services;
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
+import coupon_system.entities.Income;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.companyExceptions.CompanyNameDuplicateException;
@@ -15,6 +16,7 @@ import coupon_system.exceptions.customerExceptions.CustomerNotExistsException;
 import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CouponRepository;
 import coupon_system.repositories.CustomerRepository;
+import coupon_system.repositories.IncomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +30,17 @@ public class AdminService extends CouponClientService {
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
+    private final IncomeRepository incomeRepository;
 
     @Autowired
     public AdminService(CompanyRepository companyRepository,
                         CouponRepository couponRepository,
-                        CustomerRepository customerRepository) {
+                        CustomerRepository customerRepository,
+                        IncomeRepository incomeRepository) {
         this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
         this.customerRepository = customerRepository;
+        this.incomeRepository = incomeRepository;
     }
 
     @Override
@@ -48,6 +53,9 @@ public class AdminService extends CouponClientService {
         }
     }
 
+    /**
+     * COMPANY methods
+     */
     public void createCompany(Company company) throws CompanyNameDuplicateException {
         this.isCompanyNameDuplicate(company.getName());
         companyRepository.save(company);
@@ -79,6 +87,9 @@ public class AdminService extends CouponClientService {
         companyRepository.deleteById(companyId);
     }
 
+    /**
+     * COUPON methods
+     */
     public void createCoupon(Coupon coupon) throws CompanyNotExistsException, CouponTitleDuplicateException {
         this.isCompanyExists(coupon.getCompanyId());
         CompanyService.createCoupon(coupon, couponRepository, companyRepository, coupon.getCompanyId());
@@ -129,6 +140,9 @@ public class AdminService extends CouponClientService {
         couponRepository.deleteById(couponId);
     }
 
+    /**
+     * CUSTOMER methods
+     */
     public void createCustomer(Customer customer) throws CouponSystemException {
         this.isCustomerNameDuplicate(customer.getName());
         customerRepository.save(customer);
@@ -158,6 +172,45 @@ public class AdminService extends CouponClientService {
 
     public void deleteCustomer(long customerId) {
         customerRepository.deleteById(customerId);
+    }
+
+    /**
+     * INCOME methods
+     */
+    public Collection<Income> getAllIncomes() throws CouponSystemException {
+
+        Collection<Income> incomes = incomeRepository.findAll();
+
+        // Checking if at least one customer exists before getting all of them
+        if (!incomes.isEmpty()) {
+            return incomes;
+        } else {
+            throw new CouponSystemException("There are no incomes.");
+        }
+    }
+
+    public Collection<Income> getCompanyIncomes(long companyId) throws CouponSystemException {
+
+        Collection<Income> incomes = incomeRepository.findCompanyIncomes(companyId);
+
+        // Checking if at least one customer exists before getting all of them
+        if (!incomes.isEmpty()) {
+            return incomes;
+        } else {
+            throw new CouponSystemException("There are no incomes of the companies.");
+        }
+    }
+
+    public Collection<Income> getCustomerIncomes(long customerId) throws CouponSystemException {
+
+        Collection<Income> incomes = incomeRepository.findCustomerIncomes(customerId);
+
+        // Checking if at least one customer exists before getting all of them
+        if (!incomes.isEmpty()) {
+            return incomes;
+        } else {
+            throw new CouponSystemException("There are no incomes of the customers.");
+        }
     }
 
     // Checking if company exists in database
