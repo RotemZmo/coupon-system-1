@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
-    Company findById(long id);
-
     @Query("SELECT DISTINCT c FROM Company c WHERE UPPER(c.name) LIKE UPPER(?1)")
     Company findByName(String name);
 

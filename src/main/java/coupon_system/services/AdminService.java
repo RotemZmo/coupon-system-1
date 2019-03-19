@@ -54,8 +54,7 @@ public class AdminService extends CouponClientService {
     }
 
     public Company getCompanyById(long companyId) throws CompanyNotExistsException {
-        this.isCompanyExists(companyId);
-        return companyRepository.findById(companyId);
+        return companyRepository.findById(companyId).orElseThrow(CompanyNotExistsException::new);
     }
 
     public Collection<Company> getAllCompanies() throws CompanyNotExistsException {
@@ -86,8 +85,7 @@ public class AdminService extends CouponClientService {
     }
 
     public Coupon getCouponById(long couponId) throws CouponSystemException {
-        isCouponExists(couponId, couponRepository);
-        return couponRepository.findById(couponId);
+        return couponRepository.findById(couponId).orElseThrow(CouponNotExistsException::new);
     }
 
     public Collection<Coupon> getAllCoupons() throws CouponNotExistsException {
@@ -136,9 +134,8 @@ public class AdminService extends CouponClientService {
         customerRepository.save(customer);
     }
 
-    public Customer getCustomerById(long customerId) throws CouponSystemException {
-        this.isCustomerExists(customerId);
-        return customerRepository.findById(customerId);
+    public Customer getCustomerById(long customerId) throws CustomerNotExistsException {
+        return customerRepository.findById(customerId).orElseThrow(CustomerNotExistsException::new);
     }
 
     public Collection<Customer> getAllCustomers() throws CouponSystemException {
@@ -165,7 +162,7 @@ public class AdminService extends CouponClientService {
 
     // Checking if company exists in database
     private void isCompanyExists(long companyId) throws CompanyNotExistsException {
-        Optional<Company> isCompanyExists = Optional.ofNullable(companyRepository.findById(companyId));
+        Optional<Company> isCompanyExists = companyRepository.findById(companyId);
         if (!isCompanyExists.isPresent()) {
             throw new CompanyNotExistsException("This company doesn't exist.");
         }
@@ -173,7 +170,7 @@ public class AdminService extends CouponClientService {
 
     // Checking if coupon exists in database
     static void isCouponExists(long couponId, CouponRepository couponRepository) throws CouponNotExistsException {
-        Optional<Coupon> isCouponExists = Optional.ofNullable(couponRepository.findById(couponId));
+        Optional<Coupon> isCouponExists = couponRepository.findById(couponId);
         if (!isCouponExists.isPresent()) {
             throw new CouponNotExistsException("This coupon doesn't exist.");
         }
@@ -181,7 +178,7 @@ public class AdminService extends CouponClientService {
 
     // Checking if customer exists in database
     private void isCustomerExists(long customerId) throws CustomerNotExistsException {
-        Optional<Customer> isCustomerExists = Optional.ofNullable(customerRepository.findById(customerId));
+        Optional<Customer> isCustomerExists = customerRepository.findById(customerId);
         if (!isCustomerExists.isPresent()) {
             throw new CustomerNotExistsException("This customer doesn't exist.");
         }

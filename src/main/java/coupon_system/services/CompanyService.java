@@ -51,9 +51,10 @@ public class CompanyService extends CouponClientService {
 
     public void createCoupon(Coupon coupon) throws CouponTitleDuplicateException {
         createCoupon(coupon, couponRepository, companyRepository, loggedCompany.getId());
-
-        Income income = new Income(loggedCompany, new Date(System.currentTimeMillis()), IncomeType.COMPANY_NEW_COUPON, 100);
-        incomeService.storeIncome(income);
+        incomeService.storeIncome(new Income(loggedCompany,
+                new Date(System.currentTimeMillis()),
+                IncomeType.COMPANY_NEW_COUPON,
+                100));
     }
 
     public Coupon getCompanyCoupon(long couponId) throws CompanyDoesntOwnCoupon {
@@ -108,15 +109,17 @@ public class CompanyService extends CouponClientService {
 
                 if (coupon.getPrice() > 0) {
 
-                    Coupon updCoupon = couponRepository.findById(coupon.getId());
+                    Coupon updCoupon = couponRepository.findById(coupon.getId()).get();
                     updCoupon.setEndDate(coupon.getEndDate());
                     updCoupon.setPrice(coupon.getPrice());
                     updCoupon.setAmount(coupon.getAmount());
 
                     couponRepository.save(updCoupon);
 
-                    Income income = new Income(loggedCompany, new Date(System.currentTimeMillis()), IncomeType.COMPANY_UPDATE_COUPON, 10);
-                    incomeService.storeIncome(income);
+                    incomeService.storeIncome(new Income(loggedCompany,
+                            new Date(System.currentTimeMillis()),
+                            IncomeType.COMPANY_UPDATE_COUPON,
+                            10));
                 } else {
                     throw new CouponUnavaliableException("Not allowed to update price to less than 1.");
                 }
@@ -135,7 +138,7 @@ public class CompanyService extends CouponClientService {
 
     static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, long loggedCompany) throws CouponTitleDuplicateException {
         isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
-        coupon.setCompany(companyRepository.findById(loggedCompany));
+        coupon.setCompany(companyRepository.findById(loggedCompany).get());
         couponRepository.save(coupon);
     }
 

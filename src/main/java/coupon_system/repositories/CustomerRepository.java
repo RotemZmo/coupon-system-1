@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Customer findById(long id);
-
     @Query("SELECT DISTINCT c FROM Customer c WHERE UPPER(c.name) LIKE UPPER(?1)")
     Customer findByName(String name);
 

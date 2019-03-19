@@ -13,8 +13,6 @@ import java.util.Collection;
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
-    Coupon findById(long id);
-
     @Query("SELECT DISTINCT c FROM Coupon c WHERE UPPER(c.title) LIKE UPPER(?1)")
     Coupon findByTitle(String title);
 

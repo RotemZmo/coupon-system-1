@@ -57,7 +57,7 @@ public class CustomerService extends CouponClientService {
         // Checking if customer already has a coupon
         this.isCustomerHasCoupon(couponId);
 
-        Coupon coupon = couponRepository.findById(couponId);
+        Coupon coupon = couponRepository.findById(couponId).get();
 
         // Checking if coupon end date isn't expired
         if (coupon.getEndDate().after(new Date(System.currentTimeMillis()))) {
@@ -65,12 +65,14 @@ public class CustomerService extends CouponClientService {
             // Checking amount of the coupon
             if (coupon.getAmount() > 0) {
 
-                Income income = new Income(loggedCustomer, new Date(System.currentTimeMillis()), IncomeType.CUSTOMER_PURCHASE, coupon.getPrice());
-                incomeService.storeIncome(income);
-
                 coupon.setAmount(coupon.getAmount() - 1);
                 couponRepository.save(coupon);
                 customerRepository.purchaseCoupon(loggedCustomer.getId(), couponId);
+
+                incomeService.storeIncome(new Income(loggedCustomer,
+                        new Date(System.currentTimeMillis()),
+                        IncomeType.CUSTOMER_PURCHASE,
+                        coupon.getPrice()));
             } else {
                 throw new CouponUnavaliableException("This coupon is not available");
             }
