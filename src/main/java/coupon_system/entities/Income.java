@@ -1,5 +1,7 @@
 package coupon_system.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import coupon_system.enums.IncomeType;
 
 import javax.persistence.*;
@@ -7,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Income implements Serializable, Comparable<Income> {
 
     @Id

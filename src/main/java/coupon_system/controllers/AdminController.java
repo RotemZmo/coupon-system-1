@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("admin")
+@RequestMapping(value = "admin")
 public class AdminController {
 
     private final AdminService adminService;
@@ -172,7 +172,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "company-income{companyId}/", method = RequestMethod.GET)
+    @RequestMapping(path = "company-income/{companyId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCompanyIncomes(@PathVariable long companyId) {
         try {
             Collection<Income> incomes = adminService.getCompanyIncomes(companyId);
@@ -182,7 +182,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "customer-income{customerId}/", method = RequestMethod.GET)
+    @RequestMapping(path = "customer-income/{customerId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCustomerIncomes(@PathVariable long customerId) {
         try {
             Collection<Income> incomes = adminService.getCustomerIncomes(customerId);
