@@ -1,4 +1,4 @@
-package coupon_system.tasks;
+package coupon_system.utilities;
 
 import coupon_system.repositories.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,7 +6,7 @@ import coupon_system.services.AdminService;
 import coupon_system.services.CompanyService;
 import coupon_system.services.CouponClientService;
 import coupon_system.services.CustomerService;
-import coupon_system.tasks.DailyCouponExpirationTask;
+import coupon_system.utilities.DailyCouponExpirationTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
