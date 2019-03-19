@@ -33,8 +33,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "company-by-id/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCompanyById(@PathVariable("id") int companyId) {
+    @RequestMapping(path = "company-by-id/{companyId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCompanyById(@PathVariable int companyId) {
         try {
             Company company = adminService.getCompanyById(companyId);
             return new ResponseEntity<>(company, HttpStatus.OK);
@@ -63,9 +63,9 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "company/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCompany(@PathVariable int id) {
-        adminService.deleteCompany(id);
+    @RequestMapping(path = "company/{companyId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteCompany(@PathVariable int companyId) {
+        adminService.deleteCompany(companyId);
         return new ResponseEntity<>("Company successfully deleted.", HttpStatus.OK);
     }
 
@@ -79,8 +79,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "coupon-by-id/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCouponById(@PathVariable("id") int couponId) {
+    @RequestMapping(path = "coupon-by-id/{couponId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCouponById(@PathVariable int couponId) {
         try {
             Coupon coupon = adminService.getCouponById(couponId);
             return new ResponseEntity<>(coupon, HttpStatus.OK);
@@ -109,9 +109,9 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "coupon/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCoupon(@PathVariable int id) {
-        adminService.deleteCoupon(id);
+    @RequestMapping(path = "coupon/{couponId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteCoupon(@PathVariable int couponId) {
+        adminService.deleteCoupon(couponId);
         return new ResponseEntity<>("Coupon successfully deleted.", HttpStatus.OK);
     }
 
@@ -125,8 +125,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "customer-by-id/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCustomerById(@PathVariable("id") int customerId) {
+    @RequestMapping(path = "customer-by-id/{customerId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
         try {
             Customer customer = adminService.getCustomerById(customerId);
             return new ResponseEntity<>(customer, HttpStatus.OK);
@@ -155,9 +155,9 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "customer/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCustomer(@PathVariable int id) {
-        adminService.deleteCustomer(id);
+    @RequestMapping(path = "customer/{customerId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
+        adminService.deleteCustomer(customerId);
         return new ResponseEntity<>("Customer successfully deleted.", HttpStatus.OK);
     }
 }

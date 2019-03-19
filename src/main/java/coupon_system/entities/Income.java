@@ -11,7 +11,7 @@ public class Income implements Serializable, Comparable<Income> {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     @ManyToOne
     private Company company;
@@ -53,11 +53,11 @@ public class Income implements Serializable, Comparable<Income> {
     public Income() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

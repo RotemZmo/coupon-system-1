@@ -12,7 +12,7 @@ public class Coupon implements Serializable, Comparable<Coupon> {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     @Column(nullable = false)
     private String title;
@@ -91,7 +91,7 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.image = image;
     }
 
-    public Coupon(int id,
+    public Coupon(long id,
                   String title,
                   Date startDate,
                   Date endDate,
@@ -113,7 +113,7 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.company = company;
     }
 
-    public Coupon(int id,
+    public Coupon(long id,
                   String title,
                   Date startDate,
                   Date endDate,
@@ -133,11 +133,11 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.image = image;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -213,7 +213,7 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.company = company;
     }
 
-    public int getCompanyId() {
+    public long getCompanyId() {
         return company.getId();
     }
 

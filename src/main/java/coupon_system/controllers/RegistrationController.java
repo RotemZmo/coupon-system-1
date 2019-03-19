@@ -7,6 +7,7 @@ import coupon_system.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ public class RegistrationController {
     }
 
     @RequestMapping(path = "company", method = RequestMethod.POST)
-    public ResponseEntity<?> registerCompany(Company company) {
+    public ResponseEntity<?> registerCompany(@RequestBody Company company) {
         try {
             registration.registerCompany(company);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -33,7 +34,7 @@ public class RegistrationController {
     }
 
     @RequestMapping(path = "customer", method = RequestMethod.POST)
-    public ResponseEntity<?> registerCustomer(Customer customer) {
+    public ResponseEntity<?> registerCustomer(@RequestBody Customer customer) {
         try {
             registration.registerCustomer(customer);
             return new ResponseEntity<>(HttpStatus.OK);

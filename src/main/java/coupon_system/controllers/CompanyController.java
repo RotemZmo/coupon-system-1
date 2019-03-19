@@ -33,8 +33,8 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "coupon-by-id/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCompanyCoupon(@PathVariable("id") int couponId) {
+    @RequestMapping(path = "coupon-by-id/{couponId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCompanyCoupon(@PathVariable int couponId) {
         try {
             Coupon coupon = companyService.getCompanyCoupon(couponId);
             return new ResponseEntity<>(coupon, HttpStatus.OK);
@@ -53,8 +53,8 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "coupon-by-type/{type}", method = RequestMethod.GET)
-    public ResponseEntity<?> getAllCompanyCouponsByType(@PathVariable("type") CouponType couponType) {
+    @RequestMapping(path = "coupon-by-type/{couponType}", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllCompanyCouponsByType(@PathVariable CouponType couponType) {
         try {
             Collection<Coupon> coupons = companyService.getAllCompanyCouponsByType(couponType);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
@@ -64,7 +64,7 @@ public class CompanyController {
     }
 
     @RequestMapping(path = "coupon-by-price/{price}", method = RequestMethod.GET)
-    public ResponseEntity<?> getAllCompanyCouponsByPrice(@PathVariable("price") double price) {
+    public ResponseEntity<?> getAllCompanyCouponsByPrice(@PathVariable double price) {
         try {
             Collection<Coupon> coupons = companyService.getAllCompanyCouponsByPrice(price);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
@@ -83,10 +83,10 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "coupon/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCoupon(@PathVariable("id") int id) {
+    @RequestMapping(path = "coupon/{couponId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteCoupon(@PathVariable int couponId) {
         try {
-            companyService.deleteCoupon(id);
+            companyService.deleteCoupon(couponId);
             return new ResponseEntity<>("Coupon successfully deleted.", HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

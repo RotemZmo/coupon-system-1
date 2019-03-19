@@ -9,7 +9,7 @@ public class Customer implements Serializable, Comparable<Customer> {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     @Column(nullable = false)
     private String name;
@@ -42,7 +42,7 @@ public class Customer implements Serializable, Comparable<Customer> {
         this.coupons = coupons;
     }
 
-    public Customer(int id,
+    public Customer(long id,
                     String name,
                     String password,
                     String email) {
@@ -52,17 +52,19 @@ public class Customer implements Serializable, Comparable<Customer> {
         this.email = email;
     }
 
-    public Customer(String name, String password, String email) {
+    public Customer(String name,
+                    String password,
+                    String email) {
         this.name = name;
         this.password = password;
         this.email = email;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

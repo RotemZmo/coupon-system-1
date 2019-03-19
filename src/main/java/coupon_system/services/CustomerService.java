@@ -49,7 +49,7 @@ public class CustomerService extends CouponClientService {
         }
     }
 
-    public void purchaseCoupon(int couponId) throws CouponSystemException {
+    public void purchaseCoupon(long couponId) throws CouponSystemException {
 
         // Checking if coupon exists before purchasing it
         AdminService.isCouponExists(couponId, couponRepository);
@@ -127,7 +127,7 @@ public class CustomerService extends CouponClientService {
     }
 
     // Checking if customer already has a coupon
-    private void isCustomerHasCoupon(int couponId) throws CustomerAlreadyHasCouponException {
+    private void isCustomerHasCoupon(long couponId) throws CustomerAlreadyHasCouponException {
         Optional<Coupon> isCustomerHasCoupon = Optional.ofNullable(couponRepository.findCustomerCoupon(loggedCustomer.getId(), couponId));
         if (isCustomerHasCoupon.isPresent()) {
             throw new CustomerAlreadyHasCouponException("You already have this coupon.");

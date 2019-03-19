@@ -25,11 +25,11 @@ public class IncomeService {
         return incomeRepository.findAll();
     }
 
-    public Collection<Income> getCompanyIncomes(int companyId) {
+    public Collection<Income> getCompanyIncomes(long companyId) {
         return incomeRepository.findCompanyIncomes(companyId);
     }
 
-    public Collection<Income> getCustomerIncomes(int customerId) {
+    public Collection<Income> getCustomerIncomes(long customerId) {
         return incomeRepository.findCustomerIncomes(customerId);
     }
 

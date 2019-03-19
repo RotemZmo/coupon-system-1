@@ -56,7 +56,7 @@ public class CompanyService extends CouponClientService {
         incomeService.storeIncome(income);
     }
 
-    public Coupon getCompanyCoupon(int couponId) throws CompanyDoesntOwnCoupon {
+    public Coupon getCompanyCoupon(long couponId) throws CompanyDoesntOwnCoupon {
         this.isCompanyOwnsCoupon(couponId);
         return couponRepository.findCompanyCoupon(couponId, loggedCompany.getId());
     }
@@ -128,12 +128,12 @@ public class CompanyService extends CouponClientService {
         }
     }
 
-    public void deleteCoupon(int couponId) throws CompanyDoesntOwnCoupon {
+    public void deleteCoupon(long couponId) throws CompanyDoesntOwnCoupon {
         this.isCompanyOwnsCoupon(couponId);
         couponRepository.deleteById(couponId);
     }
 
-    static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, int loggedCompany) throws CouponTitleDuplicateException {
+    static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, long loggedCompany) throws CouponTitleDuplicateException {
         isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
         coupon.setCompany(companyRepository.findById(loggedCompany));
         couponRepository.save(coupon);
@@ -150,7 +150,7 @@ public class CompanyService extends CouponClientService {
     }
 
     // Checking if company is owner of the coupon
-    private void isCompanyOwnsCoupon(int couponId) throws CompanyDoesntOwnCoupon {
+    private void isCompanyOwnsCoupon(long couponId) throws CompanyDoesntOwnCoupon {
         Optional<Coupon> isCompanyOwnsCoupon = Optional
                 .ofNullable(couponRepository.findCompanyCoupon(couponId, loggedCompany.getId()));
         if (!isCompanyOwnsCoupon.isPresent()) {

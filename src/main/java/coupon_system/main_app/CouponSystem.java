@@ -13,10 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CouponSystem {
 
-    private AdminService adminService;
-    private CompanyService companyService;
-    private CustomerService customerService;
-    private DailyCouponExpirationTask task;
+    private final AdminService adminService;
+    private final CompanyService companyService;
+    private final CustomerService customerService;
 
     @Autowired
     public CouponSystem(AdminService adminService,
@@ -26,8 +25,7 @@ public class CouponSystem {
         this.adminService = adminService;
         this.companyService = companyService;
         this.customerService = customerService;
-        this.task = task;
-        this.runCleaning();
+        task.start();
     }
 
     public CouponClientService login(String username,
@@ -44,10 +42,4 @@ public class CouponSystem {
                 throw new LoginFailedException("Authorization is failed, please try again.");
         }
     }
-
-    private synchronized void runCleaning() {
-        task.startTask();
-        new Thread(task).start();
-    }
-
 }

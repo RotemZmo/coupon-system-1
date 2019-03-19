@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 
 @Repository
-public interface CouponRepository extends JpaRepository<Coupon, Integer> {
+public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
-    Coupon findById(int id);
+    Coupon findById(long id);
 
     @Query("SELECT DISTINCT c FROM Coupon c WHERE UPPER(c.title) LIKE UPPER(?1)")
     Coupon findByTitle(String title);
@@ -30,30 +30,30 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
      * Queries for coupons of the company
      */
     @Query("SELECT c FROM Coupon c WHERE c.id = ?1 AND company_id = ?2")
-    Coupon findCompanyCoupon(int couponId, int companyId);
+    Coupon findCompanyCoupon(long couponId, long companyId);
 
     @Query("SELECT c FROM Coupon c WHERE company_id = ?1")
-    Collection<Coupon> findAllCompanyCoupons(int companyId);
+    Collection<Coupon> findAllCompanyCoupons(long companyId);
 
     @Query("SELECT c FROM Coupon c WHERE company_id = ?1 AND c.couponType = ?2")
-    Collection<Coupon> findAllCompanyCouponsByType(int companyId, CouponType couponType);
+    Collection<Coupon> findAllCompanyCouponsByType(long companyId, CouponType couponType);
 
     @Query("SELECT c FROM Coupon c WHERE company_id = ?1 AND c.price <= ?2")
-    Collection<Coupon> findAllCompanyCouponsByPrice(int companyId, double price);
+    Collection<Coupon> findAllCompanyCouponsByPrice(long companyId, double price);
 
     /**
      * Queries for coupons of the customer
      */
     @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.id = ?2")
-    Coupon findCustomerCoupon(int customerId, int couponId);
+    Coupon findCustomerCoupon(long customerId, long couponId);
 
     @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1")
-    Collection<Coupon> findAllCustomerCoupons(int customerId);
+    Collection<Coupon> findAllCustomerCoupons(long customerId);
 
     @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.couponType = ?2")
-    Collection<Coupon> findAllCustomerCouponsByType(int customerId, CouponType couponType);
+    Collection<Coupon> findAllCustomerCouponsByType(long customerId, CouponType couponType);
 
     @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.price <= ?2")
-    Collection<Coupon> findAllCustomerCouponsByPrice(int customerId, double price);
+    Collection<Coupon> findAllCustomerCouponsByPrice(long customerId, double price);
 
 }

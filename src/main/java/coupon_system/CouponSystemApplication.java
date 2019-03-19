@@ -3,10 +3,8 @@ package coupon_system;
 import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
-import coupon_system.entities.Income;
 import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
-import coupon_system.enums.IncomeType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.main_app.CouponSystem;
 import coupon_system.services.AdminService;
@@ -39,7 +37,7 @@ public class CouponSystemApplication {
     /**
      * COMPANY
      */
-    static Company company = new Company("comp111", "comp1", "comp1@gmail.com");
+    static Company company = new Company("comp1111", "comp1", "comp1@gmail.com");
     static Company companyUpd = new Company(15, "comp666", "666", "comp666@gmail.com");
 
     /**
@@ -54,8 +52,4 @@ public class CouponSystemApplication {
     static Coupon coupon = new Coupon("Coupon41", new Date(0), new Date(0), 10, CouponType.CAMPING, "coup", 10, "coup");
     static Coupon couponUpd = new Coupon(21, "Coupon1sss", new Date(0), new Date(System.currentTimeMillis() + 100000), 100, CouponType.CAMPING, "coup", 100, "coup");
 
-    /**
-     * INCOME
-     */
-    static Income income = new Income(company, new Date(System.currentTimeMillis()), IncomeType.CUSTOMER_PURCHASE, 10);
 }
