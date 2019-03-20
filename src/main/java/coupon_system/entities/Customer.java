@@ -104,6 +104,10 @@ public class Customer implements Serializable, Comparable<Customer> {
         this.coupons = coupons;
     }
 
+    public void purchaseCoupon(Coupon coupon) {
+        coupons.add(coupon);
+    }
+
     @Override
     public int compareTo(Customer customer) {
         return Long.compare(this.id, customer.id);

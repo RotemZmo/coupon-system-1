@@ -64,7 +64,9 @@ public class CustomerService extends CouponClientService implements Validations 
 
                 coupon.setAmount(coupon.getAmount() - 1);
                 couponRepository.save(coupon);
-                customerRepository.purchaseCoupon(loggedCustomer.getId(), couponId);
+
+                loggedCustomer.purchaseCoupon(coupon);
+                customerRepository.save(loggedCustomer);
 
                 incomeRepository.save(new Income(loggedCustomer,
                         new Date(System.currentTimeMillis()),
