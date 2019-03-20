@@ -47,7 +47,7 @@ public class CouponSystemApplication {
     /**
      * COUPON
      */
-    static Coupon coupon = new Coupon("Coupon41", new Date(0), new Date(0), 10, CouponType.CAMPING, "coup", 10, "coup");
+    static Coupon coupon = new Coupon("Coupon121", new Date(0), new Date(0), 10, CouponType.CAMPING, "coup", 10, "coup");
     static Coupon couponUpd = new Coupon(21, "Coupon1sss", new Date(0), new Date(System.currentTimeMillis() + 100000), 100, CouponType.CAMPING, "coup", 100, "coup");
 
 }

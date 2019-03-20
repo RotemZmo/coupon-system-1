@@ -28,7 +28,7 @@ public class CompanyController {
     public ResponseEntity<?> createCoupon(@RequestBody Coupon coupon) {
         try {
             companyService.createCoupon(coupon);
-            return new ResponseEntity<>(coupon, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -78,7 +78,7 @@ public class CompanyController {
     public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon) {
         try {
             companyService.updateCoupon(coupon);
-            return new ResponseEntity<>(coupon, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -88,7 +88,7 @@ public class CompanyController {
     public ResponseEntity<?> deleteCoupon(@PathVariable int couponId) {
         try {
             companyService.deleteCoupon(couponId);
-            return new ResponseEntity<>("Coupon successfully deleted.", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

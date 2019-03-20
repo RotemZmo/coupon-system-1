@@ -16,12 +16,14 @@ import coupon_system.repositories.CustomerRepository;
 import coupon_system.repositories.IncomeRepository;
 import coupon_system.utilities.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
 
 @Service
+@Scope("prototype")
 public class CustomerService extends CouponClientService implements Validations {
 
     private final CustomerRepository customerRepository;

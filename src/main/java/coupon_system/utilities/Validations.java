@@ -53,9 +53,11 @@ public interface Validations {
     }
 
     default void isCouponTitleDuplicate(String couponTitle, CouponRepository couponRepository) throws CouponTitleDuplicateException {
-        couponRepository.findByTitle(couponTitle)
-                .orElseThrow(() -> new CouponTitleDuplicateException("Coupon title: " + couponTitle
-                        + " already exists."));
+        Optional<Coupon> isCouponTitleDuplicate = couponRepository.findByTitle(couponTitle);
+        if (isCouponTitleDuplicate.isPresent()) {
+            throw new CouponTitleDuplicateException("Coupon title: " + couponTitle
+                    + " already exists.");
+        }
     }
 
     default void isCompanyOwnsCoupon(long companyId, long couponId, CouponRepository couponRepository) throws CompanyDoesntOwnCoupon {

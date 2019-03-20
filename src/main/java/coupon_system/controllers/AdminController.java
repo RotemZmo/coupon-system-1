@@ -28,7 +28,7 @@ public class AdminController {
     public ResponseEntity<?> createCompany(@RequestBody Company company) {
         try {
             adminService.createCompany(company);
-            return new ResponseEntity<>(company, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -58,7 +58,7 @@ public class AdminController {
     public ResponseEntity<?> updateCompany(@RequestBody Company company) {
         try {
             adminService.updateCompany(company);
-            return new ResponseEntity<>(company, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -67,14 +67,14 @@ public class AdminController {
     @RequestMapping(path = "company/{companyId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCompany(@PathVariable int companyId) {
         adminService.deleteCompany(companyId);
-        return new ResponseEntity<>("Company successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(path = "coupon", method = RequestMethod.POST)
     public ResponseEntity<?> createCoupon(@RequestBody Coupon coupon) {
         try {
             adminService.createCoupon(coupon);
-            return new ResponseEntity<>(coupon, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -104,7 +104,7 @@ public class AdminController {
     public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon) {
         try {
             adminService.updateCoupon(coupon);
-            return new ResponseEntity<>(coupon, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -113,14 +113,14 @@ public class AdminController {
     @RequestMapping(path = "coupon/{couponId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCoupon(@PathVariable int couponId) {
         adminService.deleteCoupon(couponId);
-        return new ResponseEntity<>("Coupon successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(path = "customer", method = RequestMethod.POST)
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
             adminService.createCustomer(customer);
-            return new ResponseEntity<>(customer, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -150,7 +150,7 @@ public class AdminController {
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
         try {
             adminService.updateCustomer(customer);
-            return new ResponseEntity<>(customer, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -159,7 +159,7 @@ public class AdminController {
     @RequestMapping(path = "customer/{customerId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
         adminService.deleteCustomer(customerId);
-        return new ResponseEntity<>("Customer successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(path = "income", method = RequestMethod.GET)
