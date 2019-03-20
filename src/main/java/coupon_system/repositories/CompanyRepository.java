@@ -5,13 +5,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.Optional;
+
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
+    @Query("SELECT с FROM Company с")
+    Optional<Collection<Company>> findAllCompanies();
+
     @Query("SELECT DISTINCT c FROM Company c WHERE UPPER(c.name) LIKE UPPER(?1)")
-    Company findByName(String name);
+    Optional<Company> findByName(String name);
 
     @Query("SELECT DISTINCT c FROM Company c WHERE UPPER(c.name) LIKE UPPER(?1) AND c.password = ?2")
-    Company login(String name, String password);
+    Optional<Company> login(String name, String password);
 
 }

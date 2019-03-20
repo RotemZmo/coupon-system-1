@@ -53,6 +53,14 @@ public class Income implements Serializable, Comparable<Income> {
         this.amount = amount;
     }
 
+    public Income(Date date,
+                  IncomeType description,
+                  double amount) {
+        this.date = date;
+        this.description = description;
+        this.amount = amount;
+    }
+
     public Income() {
     }
 

@@ -36,7 +36,7 @@ public class CouponSystemApplication {
      * COMPANY
      */
     static Company company = new Company("comp1111", "comp1", "comp1@gmail.com");
-    static Company companyUpd = new Company(15, "comp666", "666", "comp666@gmail.com");
+    static Company companyUpd = new Company(60, "comp666", "666", "comp666@gmail.com");
 
     /**
      * CUSTOMER

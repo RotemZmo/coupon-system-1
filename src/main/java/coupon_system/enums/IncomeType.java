@@ -1,7 +1,22 @@
 package coupon_system.enums;
 
 public enum IncomeType {
-    CUSTOMER_PURCHASE,
-    COMPANY_NEW_COUPON,
-    COMPANY_UPDATE_COUPON
+
+    /**
+     * ADMIN
+     */
+    ADMIN_CREATED_COUPON,
+    ADMIN_UPDATED_COUPON,
+    ADMIN_DELETED_COUPON,
+    /**
+     * COMPANY
+     */
+    COMPANY_CREATED_COUPON,
+    COMPANY_UPDATED_COUPON,
+    COMPANY_DELETED_COUPON,
+    /**
+     * CUSTOMER
+     */
+    CUSTOMER_PURCHASED_COUPON
+
 }
