@@ -86,10 +86,11 @@ public class AdminService extends CouponClientService implements Validations {
     /**
      * COUPON methods
      */
-    public void createCoupon(Coupon coupon) throws CompanyNotExistsException, CouponTitleDuplicateException {
-        this.isCompanyExists(coupon.getCompanyId(), companyRepository);
+    public void createCoupon(long companyId, Coupon coupon) throws CompanyNotExistsException, CouponTitleDuplicateException {
         this.isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
-        CompanyService.createCoupon(coupon, couponRepository, companyRepository, coupon.getCompanyId());
+        coupon.setCompany(companyRepository.findById(companyId)
+                .orElseThrow(() -> new CompanyNotExistsException("This company doesn't exist.")));
+        couponRepository.save(coupon);
 
         incomeRepository.save(new Income(
                 new Date(System.currentTimeMillis()),

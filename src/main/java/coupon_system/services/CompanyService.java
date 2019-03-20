@@ -50,7 +50,8 @@ public class CompanyService extends CouponClientService implements Validations {
 
     public void createCoupon(Coupon coupon) throws CouponTitleDuplicateException {
         this.isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
-        createCoupon(coupon, couponRepository, companyRepository, loggedCompany.getId());
+        coupon.setCompany(loggedCompany);
+        couponRepository.save(coupon);
 
         incomeRepository.save(new Income(loggedCompany,
                 new Date(System.currentTimeMillis()),
@@ -120,11 +121,6 @@ public class CompanyService extends CouponClientService implements Validations {
                 new Date(System.currentTimeMillis()),
                 IncomeType.COMPANY_DELETED_COUPON,
                 1));
-    }
-
-    static void createCoupon(Coupon coupon, CouponRepository couponRepository, CompanyRepository companyRepository, long loggedCompany) throws CouponTitleDuplicateException {
-        coupon.setCompany(companyRepository.findById(loggedCompany).get());
-        couponRepository.save(coupon);
     }
 
     public Collection<Income> getCompanyIncomes() throws CouponSystemException {

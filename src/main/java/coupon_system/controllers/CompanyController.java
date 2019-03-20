@@ -24,17 +24,17 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @RequestMapping(path = "coupon", method = RequestMethod.POST)
+    @RequestMapping(path = "coupons", method = RequestMethod.POST)
     public ResponseEntity<?> createCoupon(@RequestBody Coupon coupon) {
         try {
             companyService.createCoupon(coupon);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(coupon, HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(path = "coupon-by-id/{couponId}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCompanyCoupon(@PathVariable int couponId) {
         try {
             Coupon coupon = companyService.getCompanyCoupon(couponId);
@@ -44,7 +44,7 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "coupon", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCompanyCoupons() {
         try {
             Collection<Coupon> coupons = companyService.getAllCompanyCoupons();
@@ -54,7 +54,7 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "coupon-by-type/{couponType}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons-by-type/{couponType}", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCompanyCouponsByType(@PathVariable CouponType couponType) {
         try {
             Collection<Coupon> coupons = companyService.getAllCompanyCouponsByType(couponType);
@@ -64,7 +64,7 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "coupon-by-price/{price}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons-by-price/{price}", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCompanyCouponsByPrice(@PathVariable double price) {
         try {
             Collection<Coupon> coupons = companyService.getAllCompanyCouponsByPrice(price);
@@ -74,17 +74,17 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "coupon", method = RequestMethod.PUT)
+    @RequestMapping(path = "coupons", method = RequestMethod.PUT)
     public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon) {
         try {
             companyService.updateCoupon(coupon);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(coupon, HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(path = "coupon/{couponId}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCoupon(@PathVariable int couponId) {
         try {
             companyService.deleteCoupon(couponId);
@@ -94,7 +94,7 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(path = "income", method = RequestMethod.GET)
+    @RequestMapping(path = "incomes", method = RequestMethod.GET)
     public ResponseEntity<?> getCompanyIncomes() {
         try {
             Collection<Income> incomes = companyService.getCompanyIncomes();

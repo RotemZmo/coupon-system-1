@@ -24,17 +24,17 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @RequestMapping(path = "company", method = RequestMethod.POST)
+    @RequestMapping(path = "companies", method = RequestMethod.POST)
     public ResponseEntity<?> createCompany(@RequestBody Company company) {
         try {
             adminService.createCompany(company);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(company, HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(path = "company-by-id/{companyId}", method = RequestMethod.GET)
+    @RequestMapping(path = "companies-by-id/{companyId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCompanyById(@PathVariable int companyId) {
         try {
             Company company = adminService.getCompanyById(companyId);
@@ -44,7 +44,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "company", method = RequestMethod.GET)
+    @RequestMapping(path = "companies", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCompanies() {
         try {
             Collection<Company> companies = adminService.getAllCompanies();
@@ -54,33 +54,33 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "company", method = RequestMethod.PUT)
+    @RequestMapping(path = "companies", method = RequestMethod.PUT)
     public ResponseEntity<?> updateCompany(@RequestBody Company company) {
         try {
             adminService.updateCompany(company);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(company, HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(path = "company/{companyId}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "companies/{companyId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCompany(@PathVariable int companyId) {
         adminService.deleteCompany(companyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(path = "coupon", method = RequestMethod.POST)
-    public ResponseEntity<?> createCoupon(@RequestBody Coupon coupon) {
+    @RequestMapping(path = "coupons", method = RequestMethod.POST)
+    public ResponseEntity<?> createCoupon(@RequestBody long companyId, Coupon coupon) {
         try {
-            adminService.createCoupon(coupon);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            adminService.createCoupon(companyId, coupon);
+            return new ResponseEntity<>(coupon, HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(path = "coupon-by-id/{couponId}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons-by-id/{couponId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCouponById(@PathVariable int couponId) {
         try {
             Coupon coupon = adminService.getCouponById(couponId);
@@ -90,7 +90,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "coupon", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCoupons() {
         try {
             Collection<Coupon> coupons = adminService.getAllCoupons();
@@ -100,33 +100,33 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "coupon", method = RequestMethod.PUT)
+    @RequestMapping(path = "coupons", method = RequestMethod.PUT)
     public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon) {
         try {
             adminService.updateCoupon(coupon);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(coupon, HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(path = "coupon/{couponId}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCoupon(@PathVariable int couponId) {
         adminService.deleteCoupon(couponId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(path = "customer", method = RequestMethod.POST)
+    @RequestMapping(path = "customers", method = RequestMethod.POST)
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
             adminService.createCustomer(customer);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(customer, HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(path = "customer-by-id/{customerId}", method = RequestMethod.GET)
+    @RequestMapping(path = "customers-by-id/{customerId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
         try {
             Customer customer = adminService.getCustomerById(customerId);
@@ -136,7 +136,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "customer", method = RequestMethod.GET)
+    @RequestMapping(path = "customers", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCustomers() {
         try {
             Collection<Customer> customers = adminService.getAllCustomers();
@@ -146,23 +146,23 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "customer", method = RequestMethod.PUT)
+    @RequestMapping(path = "customers", method = RequestMethod.PUT)
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
         try {
             adminService.updateCustomer(customer);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(customer, HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(path = "customer/{customerId}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "customers/{customerId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
         adminService.deleteCustomer(customerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(path = "income", method = RequestMethod.GET)
+    @RequestMapping(path = "incomes", method = RequestMethod.GET)
     public ResponseEntity<?> getAllIncomes() {
         try {
             Collection<Income> incomes = adminService.getAllIncomes();
@@ -172,7 +172,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "company-income/{companyId}", method = RequestMethod.GET)
+    @RequestMapping(path = "company-incomes/{companyId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCompanyIncomes(@PathVariable long companyId) {
         try {
             Collection<Income> incomes = adminService.getCompanyIncomes(companyId);
@@ -182,7 +182,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "customer-income/{customerId}", method = RequestMethod.GET)
+    @RequestMapping(path = "customer-incomes/{customerId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCustomerIncomes(@PathVariable long customerId) {
         try {
             Collection<Income> incomes = adminService.getCustomerIncomes(customerId);

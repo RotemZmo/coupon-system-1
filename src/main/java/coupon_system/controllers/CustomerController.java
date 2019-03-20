@@ -27,7 +27,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @RequestMapping(path = "purchase/{couponId}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.GET)
     public ResponseEntity<?> purchaseCoupon(@PathVariable int couponId) {
         try {
             customerService.purchaseCoupon(couponId);
@@ -37,7 +37,7 @@ public class CustomerController {
         }
     }
 
-    @RequestMapping(path = "purchased", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCustomerCoupons() {
         try {
             Collection<Coupon> coupons = customerService.getPurchasedCoupons();
@@ -47,7 +47,7 @@ public class CustomerController {
         }
     }
 
-    @RequestMapping(path = "purchased-by-type/{couponType}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons-by-type/{couponType}", method = RequestMethod.GET)
     public ResponseEntity<?> getPurchasedCouponsByType(@PathVariable CouponType couponType) {
         try {
             Collection<Coupon> coupons = customerService.getPurchasedCouponsByType(couponType);
@@ -57,7 +57,7 @@ public class CustomerController {
         }
     }
 
-    @RequestMapping(path = "purchased-by-price/{price}", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons-by-price/{price}", method = RequestMethod.GET)
     public ResponseEntity<?> getPurchasedCouponsByPrice(@PathVariable double price) {
         try {
             Collection<Coupon> coupons = customerService.getPurchasedCouponsByPrice(price);
@@ -67,7 +67,7 @@ public class CustomerController {
         }
     }
 
-    @RequestMapping(path = "available", method = RequestMethod.GET)
+    @RequestMapping(path = "coupons-available", method = RequestMethod.GET)
     public ResponseEntity<?> getAllAvailableCoupons() {
         try {
             Collection<Coupon> coupons = customerService.getAllAvailableCoupons();

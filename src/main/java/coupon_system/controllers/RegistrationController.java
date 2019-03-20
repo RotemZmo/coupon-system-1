@@ -23,7 +23,7 @@ public class RegistrationController {
         this.registration = registration;
     }
 
-    @RequestMapping(path = "company", method = RequestMethod.POST)
+    @RequestMapping(path = "companies", method = RequestMethod.POST)
     public ResponseEntity<?> registerCompany(@RequestBody Company company) {
         try {
             registration.registerCompany(company);
@@ -33,7 +33,7 @@ public class RegistrationController {
         }
     }
 
-    @RequestMapping(path = "customer", method = RequestMethod.POST)
+    @RequestMapping(path = "customers", method = RequestMethod.POST)
     public ResponseEntity<?> registerCustomer(@RequestBody Customer customer) {
         try {
             registration.registerCustomer(customer);
