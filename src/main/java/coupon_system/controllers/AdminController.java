@@ -17,7 +17,7 @@ import java.util.Collection;
 @RequestMapping(value = "admin")
 public class AdminController {
 
-    private final AdminService adminService;
+    private AdminService adminService;
 
     @Autowired
     public AdminController(AdminService adminService) {
@@ -101,9 +101,9 @@ public class AdminController {
     }
 
     @RequestMapping(path = "coupons", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon) {
+    public ResponseEntity<?> updateCoupon(@RequestBody long companyId, Coupon coupon) {
         try {
-            adminService.updateCoupon(coupon);
+            adminService.updateCoupon(companyId, coupon);
             return new ResponseEntity<>(coupon, HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

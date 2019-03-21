@@ -48,7 +48,7 @@ public class AdminService extends CouponClientService implements Validations {
     @Override
     public CouponClientService login(String username,
                                      String password) throws LoginFailedException {
-        if (username.equalsIgnoreCase("admin") && password.equals("1234")) {
+        if (username.equalsIgnoreCase("admin") && password.equals("admin")) {
             return this;
         } else {
             throw new LoginFailedException("Authorization is failed, please try again.");
@@ -108,11 +108,12 @@ public class AdminService extends CouponClientService implements Validations {
                 .orElseThrow(() -> new CouponNotExistsException("There are no coupons."));
     }
 
-    public void updateCoupon(Coupon coupon) throws CouponSystemException {
+    public void updateCoupon(long companyId, Coupon coupon) throws CouponSystemException {
 
-        this.isCompanyExists(coupon.getCompanyId(), companyRepository);
         this.isCouponExists(coupon.getId(), couponRepository);
         this.isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
+        coupon.setCompany(companyRepository.findById(companyId)
+                .orElseThrow(() -> new CompanyNotExistsException("This company doesn't exist.")));
 
         if (coupon.getEndDate().after(new Date(System.currentTimeMillis()))) {
 
@@ -189,7 +190,7 @@ public class AdminService extends CouponClientService implements Validations {
 
     public Collection<Income> getCustomerIncomes(long customerId) throws CouponSystemException {
         return incomeRepository.findCustomerIncomes(customerId)
-                .orElseThrow(() -> new CouponSystemException("There are no incomes of the customer."));
+                .orElseThrow(() -> new CouponSystemException("There are no incomes of the customers."));
     }
 
 }

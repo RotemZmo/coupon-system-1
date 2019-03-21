@@ -23,7 +23,7 @@ public class CouponSystemApplication {
 //        SpringApplication.run(CouponSystemApplication.class, args);
         ConfigurableApplicationContext context = SpringApplication.run(CouponSystemApplication.class, args);
         CouponSystem couponSystem = context.getBean("couponSystem", CouponSystem.class);
-        AdminService adminService = (AdminService) couponSystem.login("admin", "1234", ClientType.ADMIN);
+        AdminService adminService = (AdminService) couponSystem.login("admin", "admin", ClientType.ADMIN);
         CompanyService companyService = (CompanyService) couponSystem.login("comp", "comp", ClientType.COMPANY);
         CustomerService customerService = (CustomerService) couponSystem.login("cust", "cust", ClientType.CUSTOMER);
         /**
