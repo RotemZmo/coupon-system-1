@@ -1,7 +1,7 @@
 # Coupon System
 Project of full-stack Java  course ©John Bryce, Hi-Tech College. Tel-Aviv.
 
-About the project:  
+About the project    
 There are three entities:
 1. Admin – can create, read, update, delete companies, coupons and customers.
 2. Company – can create, read, update, delete coupons.
