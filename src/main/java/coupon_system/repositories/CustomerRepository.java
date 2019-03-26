@@ -14,10 +14,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT с FROM Customer с")
     Optional<Collection<Customer>> findAllCustomers();
 
-    @Query("SELECT DISTINCT c FROM Customer c WHERE UPPER(c.name) LIKE UPPER(?1)")
+    @Query("SELECT DISTINCT c FROM Customer c WHERE UPPER(c.name) LIKE UPPER(:name)")
     Optional<Customer> findByName(String name);
 
-    @Query("SELECT DISTINCT c FROM Customer c WHERE UPPER(c.name) LIKE UPPER(?1) AND  c.password = ?2")
+    @Query("SELECT DISTINCT c FROM Customer c WHERE UPPER(c.name) LIKE UPPER(:name) AND  c.password = :password")
     Optional<Customer> login(String name, String password);
 
 }

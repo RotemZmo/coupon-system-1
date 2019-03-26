@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
-    @Query("SELECT DISTINCT c FROM Coupon c WHERE UPPER(c.title) LIKE UPPER(?1)")
+    @Query("SELECT DISTINCT c FROM Coupon c WHERE UPPER(c.title) LIKE UPPER(:title)")
     Optional<Coupon> findByTitle(String title);
 
     @Query("SELECT с FROM Coupon с")
@@ -25,37 +25,37 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Coupon c WHERE c.endDate < CURRENT_DATE ")
+    @Query("DELETE FROM Coupon c WHERE c.endDate < CURRENT_DATE")
     void deleteExpiredCoupons();
 
     /**
      * Queries for coupons of the company
      */
-    @Query("SELECT c FROM Coupon c WHERE c.company.id = ?1 AND c.id = ?2")
+    @Query("SELECT c FROM Coupon c WHERE c.company.id = :companyId AND c.id = :couponId")
     Optional<Coupon> findCompanyCoupon(long companyId, long couponId);
 
-    @Query("SELECT c FROM Coupon c WHERE c.company.id = ?1")
+    @Query("SELECT c FROM Coupon c WHERE c.company.id = :companyId")
     Optional<Collection<Coupon>> findAllCompanyCoupons(long companyId);
 
-    @Query("SELECT c FROM Coupon c WHERE c.company.id = ?1 AND c.couponType = ?2")
+    @Query("SELECT c FROM Coupon c WHERE c.company.id = :companyId AND c.couponType = :couponType")
     Optional<Collection<Coupon>> findAllCompanyCouponsByType(long companyId, CouponType couponType);
 
-    @Query("SELECT c FROM Coupon c WHERE c.company.id = ?1 AND c.price <= ?2")
+    @Query("SELECT c FROM Coupon c WHERE c.company.id = :companyId AND c.price <= :price")
     Optional<Collection<Coupon>> findAllCompanyCouponsByPrice(long companyId, double price);
 
     /**
      * Queries for coupons of the customer
      */
-    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.id = ?2")
+    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = :customerId AND coupon.id = :couponId")
     Optional<Coupon> findCustomerCoupon(long customerId, long couponId);
 
-    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1")
+    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = :customerId")
     Optional<Collection<Coupon>> findAllCustomerCoupons(long customerId);
 
-    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.couponType = ?2")
+    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = :customerId AND coupon.couponType = :couponType")
     Optional<Collection<Coupon>> findAllCustomerCouponsByType(long customerId, CouponType couponType);
 
-    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = ?1 AND coupon.price <= ?2")
+    @Query("SELECT coupon FROM Customer c JOIN c.coupons coupon WHERE c.id = :customerId AND coupon.price <= :price")
     Optional<Collection<Coupon>> findAllCustomerCouponsByPrice(long customerId, double price);
 
 }

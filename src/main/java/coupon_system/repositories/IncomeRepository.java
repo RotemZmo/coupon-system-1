@@ -16,10 +16,10 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
     @Query("SELECT i FROM Income i")
     Optional<Collection<Income>> findAllIncomes();
 
-    @Query("SELECT i FROM Income i WHERE i.company.id = ?1")
+    @Query("SELECT i FROM Income i WHERE i.company.id = :companyId")
     Optional<Collection<Income>> findCompanyIncomes(long companyId);
 
-    @Query("SELECT i FROM Income i WHERE i.customer.id = ?1")
+    @Query("SELECT i FROM Income i WHERE i.customer.id = :companyId")
     Optional<Collection<Income>> findCustomerIncomes(long companyId);
 
     @Modifying
