@@ -1,0 +1,56 @@
+<form class="example-form div2 animated bounceInRight"
+      (ngSubmit)="onSubmit()"
+>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           placeholder="Customer name"
+           [formControl]="form.get('name')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('name').hasError('minlength') && !form.get('name').hasError('required')">
+      Please enter a valid name (Minimum length: 4)
+    </mat-error>
+    <mat-error *ngIf="form.get('name').hasError('maxlength') && !form.get('name').hasError('required')">
+      Please enter a valid name (Maximum length: 20)
+    </mat-error>
+    <mat-error *ngIf="form.get('name').hasError('required')">
+      Name is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           placeholder="Email"
+           [formControl]="form.get('email')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('email').hasError('email') && !form.get('email').hasError('required')">
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="form.get('email').hasError('maxlength') && !form.get('email').hasError('required')">
+      Please enter a valid email (Maximum length: 20)
+    </mat-error>
+    <mat-error *ngIf="form.get('email').hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           type="password"
+           placeholder="Password"
+           [formControl]="form.get('password')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('password').hasError('minlength') && !form.get('password').hasError('required')">
+      Please enter a valid password (Minimum length: 4)
+    </mat-error>
+    <mat-error *ngIf="form.get('password').hasError('maxlength') && !form.get('password').hasError('required')">
+      Please enter a valid password (Maximum length: 20)
+    </mat-error>
+    <mat-error *ngIf="form.get('password').hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <button mat-button class="button2" [disabled]="form.invalid">Add</button>
+</form>

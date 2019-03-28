@@ -1,0 +1,54 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav #sidenav [(mode)]="over" [(opened)]="opened" class="bottom-to-top">
+    <div class="my-2" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px"></div>
+    <div class="mt-2 py-3 text-white" fxLayout="column"
+         fxLayoutAlign="center center"
+         fxLayoutGap="7px">
+      <div>
+        <a>
+          <span class="lead">COMPANY</span>
+        </a>
+      </div>
+    </div>
+    <hr width="90%">
+    <div>
+      <mat-nav-list>
+        <button mat-button class="button1" routerLink="/company/create-coupon">Add Coupon</button>
+        <button mat-button class="button1" routerLink="/company/my-coupons">My Coupons</button>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="header-box-shadow">
+      <button mat-icon-button (click)="sidenav.toggle()" fxShow.sm="true" fxShow.gt-sm="false">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-icon class="mr-1">home</mat-icon>
+      <span>Coupon System</span>
+      <span class="spacer"></span>
+      <button mat-button [matMenuTriggerFor]="menu" fxShow.lt-md="false" fxShow.gt-sm="true">
+        <mat-icon>exit_to_app</mat-icon>
+        <span class="ml-2">Sign out</span>
+      </button>
+      <button mat-icon-button [matMenuTriggerFor]="menu" fxShow.lt-md="true" fxShow.gt-sm="false">
+        <mat-menu #menu="matMenu" overlapTrigger="false">
+          <span class="sure">Are you sure?</span>
+          <button mat-menu-item>
+            <span>No</span>
+          </button>
+          <button mat-menu-item (click)="auth.logout()">
+            <span>Yes</span>
+          </button>
+        </mat-menu>
+      </button>
+    </mat-toolbar>
+
+    <router-outlet></router-outlet>
+    <div class="animated fadeOut slower">
+      <h1>Welcome</h1>
+      <h2>{{date}}</h2>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,133 @@
+<form class="example-form div2 animated bounceInRight"
+      (ngSubmit)="onSubmit()"
+>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           placeholder="Title"
+           [formControl]="form.get('title')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('title').hasError('minlength') && !form.get('title').hasError('required')">
+      Please enter a valid title (Minimum length: 4)
+    </mat-error>
+    <mat-error *ngIf="form.get('title').hasError('maxlength') && !form.get('title').hasError('required')">
+      Please enter a valid title (Maximum length: 20)
+    </mat-error>
+    <mat-error *ngIf="form.get('title').hasError('required')">
+      Title is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field style="width: 50%" color="accent">
+    <mat-label>Start date</mat-label>
+    <input matInput
+           type="date"
+           [matDatepicker]="startDate"
+           [formControl]="form.get('startDate')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('startDate').hasError('required')">
+      Start date is <strong>required</strong>
+    </mat-error>
+    <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+    <mat-datepicker #startDate></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field style="width: 50%" color="accent">
+    <mat-label>End date</mat-label>
+    <input matInput
+           type="date"
+           [matDatepicker]="endDate"
+           [formControl]="form.get('endDate')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('endDate').hasError('required')">
+      End date is <strong>required</strong>
+    </mat-error>
+    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+    <mat-datepicker #endDate color="primary"></mat-datepicker>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           type="number"
+           placeholder="Amount"
+           [formControl]="form.get('amount')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('amount').hasError('min') && !form.get('amount').hasError('required')">
+      Please enter a valid amount (Minimum: 1)
+    </mat-error>
+    <mat-error *ngIf="form.get('amount').hasError('required')">
+      Amount is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <mat-select
+      placeholder="Coupon type"
+      [formControl]="form.get('couponType')"
+    >
+      <mat-option *ngFor="let coupon of coupons" [value]="coupon.value">
+        {{coupon.value}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('couponType').hasError('required')">
+      Coupon type is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           placeholder="Message"
+           [formControl]="form.get('message')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('message').hasError('minlength') && !form.get('message').hasError('required')">
+      Please enter a valid message (Minimum length: 4)
+    </mat-error>
+    <mat-error *ngIf="form.get('message').hasError('maxlength') && !form.get('message').hasError('required')">
+      Please enter a valid message (Maximum length: 20)
+    </mat-error>
+    <mat-error *ngIf="form.get('message').hasError('required')">
+      Message is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           type="number"
+           placeholder="Price"
+           [formControl]="form.get('price')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('price').hasError('min') && !form.get('price').hasError('required')">
+      Please enter a valid price (Minimum: 1)
+    </mat-error>
+    <mat-error *ngIf="form.get('price').hasError('required')">
+      Price is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           placeholder="Image"
+           [formControl]="form.get('image')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('image').hasError('required')">
+      Image is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input matInput
+           type="number"
+           placeholder="Company ID"
+           [formControl]="form.get('companyId')"
+           [errorStateMatcher]="matcher"
+    >
+    <mat-error *ngIf="form.get('companyId').hasError('required')">
+      Company ID is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <button mat-button class="button2" [disabled]="form.invalid">Add</button>
+</form>

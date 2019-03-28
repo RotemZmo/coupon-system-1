@@ -1,0 +1,87 @@
+<form class="div2 animated bounceInRight">
+  <mat-form-field>
+    <input matInput (keyup)="couponFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+
+  <table mat-table [dataSource]="couponSource" multiTemplateDataRows class="mat-elevation-z8">
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of couponColumns">
+      <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="couponColumns.length">
+        <div class="example-element-detail"
+             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <div class="example-element-description">
+            <button mat-stroked-button class="button3"
+                    (click)="onShowUpdate()"
+            >Update
+            </button>
+            <button mat-stroked-button class="button3"
+                    (click)="onDelete(element.id)"
+            >Remove
+            </button>
+            <br>
+            <form *ngIf="showUpdate" class="example-form div2 animated bounceInUp faster"
+                  (ngSubmit)="onUpdate(element.id)"
+            >
+              <mat-form-field color="accent">
+                <mat-label>End date</mat-label>
+                <input matInput
+                       [matDatepicker]="endDate"
+                       [formControl]="form.get('endDate')"
+                       [errorStateMatcher]="matcher"
+                >
+                <mat-error *ngIf="form.get('endDate').hasError('required')">
+                  End date is <strong>required</strong>
+                </mat-error>
+                <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                <mat-datepicker #endDate color="primary"></mat-datepicker>
+              </mat-form-field>
+              <br>
+              <mat-form-field class="example-full-width">
+                <input matInput
+                       type="number"
+                       placeholder="Price"
+                       [formControl]="form.get('price')"
+                       [errorStateMatcher]="matcher"
+                >
+                <mat-error *ngIf="form.get('price').hasError('min') && !form.get('price').hasError('required')">
+                  Please enter a valid price (Minimum: 1)
+                </mat-error>
+                <mat-error *ngIf="form.get('price').hasError('required')">
+                  Price is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <br>
+              <mat-form-field class="example-full-width">
+                <input matInput
+                       type="number"
+                       placeholder="Amount"
+                       [formControl]="form.get('amount')"
+                       [errorStateMatcher]="matcher"
+                >
+                <mat-error *ngIf="form.get('amount').hasError('min') && !form.get('amount').hasError('required')">
+                  Please enter a valid amount (Minimum: 1)
+                </mat-error>
+                <mat-error *ngIf="form.get('amount').hasError('required')">
+                  Amount is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <button mat-button class="button2" [disabled]="form.invalid">Update</button>
+            </form>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="couponColumns"></tr>
+    <tr mat-row *matRowDef="let element; columns: couponColumns;"
+        class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  </table>
+</form>

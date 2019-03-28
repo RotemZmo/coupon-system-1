@@ -1,0 +1,59 @@
+<form class="div2 animated bounceInRight">
+  <mat-form-field>
+    <input matInput (keyup)="couponFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+
+  <table mat-table [dataSource]="couponSource" class="mat-elevation-z8">
+
+    <!-- Title column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+    </ng-container>
+
+    <!-- Start date column -->
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef>Start Date</th>
+      <td mat-cell *matCellDef="let element"> {{element.startDate}} </td>
+    </ng-container>
+
+    <!-- End date column -->
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef>End Date</th>
+      <td mat-cell *matCellDef="let element"> {{element.endDate}} </td>
+    </ng-container>
+
+    <!-- Amount column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Amount</th>
+      <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+    </ng-container>
+
+    <!-- Type column -->
+    <ng-container matColumnDef="couponType">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let element"> {{element.couponType}} </td>
+    </ng-container>
+
+    <!-- Message column -->
+    <ng-container matColumnDef="message">
+      <th mat-header-cell *matHeaderCellDef>Message</th>
+      <td mat-cell *matCellDef="let element"> {{element.message}} </td>
+    </ng-container>
+
+    <!-- Price column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+    </ng-container>
+
+    <!-- Image column -->
+    <ng-container matColumnDef="image">
+      <th mat-header-cell *matHeaderCellDef>Image</th>
+      <td mat-cell *matCellDef="let element"> {{element.image}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="couponColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: couponColumns;"></tr>
+  </table>
+</form>
