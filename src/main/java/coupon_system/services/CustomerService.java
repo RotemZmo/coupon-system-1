@@ -16,20 +16,17 @@ import coupon_system.repositories.CustomerRepository;
 import coupon_system.repositories.IncomeRepository;
 import coupon_system.utilities.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
 
 @Service
-@Scope("prototype")
-public class CustomerService extends CouponClientService implements Validations {
+public class CustomerService implements Validations {
 
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
     private final IncomeRepository incomeRepository;
-    private Customer loggedCustomer;
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository,
@@ -40,18 +37,16 @@ public class CustomerService extends CouponClientService implements Validations 
         this.incomeRepository = incomeRepository;
     }
 
-    @Override
-    public CouponClientService login(String username,
-                                     String password) throws LoginFailedException {
-        loggedCustomer = customerRepository.login(username, password)
-                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again."));
-        return this;
+    public long login(String username,
+                      String password) throws LoginFailedException {
+        return customerRepository.login(username, password)
+                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again.")).getId();
     }
 
-    public void purchaseCoupon(long couponId) throws CouponSystemException {
+    public void purchaseCoupon(Customer customer, long couponId) throws CouponSystemException {
 
         // Checking if customer already has a coupon
-        this.isCustomerHasCoupon(loggedCustomer.getId(), couponId, couponRepository);
+        this.isCustomerHasCoupon(customer.getId(), couponId, couponRepository);
 
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new CouponNotExistsException("This coupon doesn't exist."));
@@ -65,13 +60,12 @@ public class CustomerService extends CouponClientService implements Validations 
                 coupon.setAmount(coupon.getAmount() - 1);
                 couponRepository.save(coupon);
 
-                loggedCustomer.purchaseCoupon(coupon);
-                customerRepository.save(loggedCustomer);
+                customer.purchaseCoupon(coupon);
+                customerRepository.save(customer);
 
-                incomeRepository.save(new Income(loggedCustomer,
+                incomeRepository.save(new Income(customer,
                         new Date(System.currentTimeMillis()),
-                        IncomeType.CUSTOMER_PURCHASED_COUPON,
-                        coupon.getPrice()));
+                        IncomeType.CUSTOMER_PURCHASED_COUPON));
             } else {
                 throw new CouponUnavaliableException("This coupon is not available");
             }
@@ -80,18 +74,18 @@ public class CustomerService extends CouponClientService implements Validations 
         }
     }
 
-    public Collection<Coupon> getPurchasedCoupons() throws CustomerDoesntOwnCoupon {
-        return couponRepository.findAllCustomerCoupons(loggedCustomer.getId())
+    public Collection<Coupon> getPurchasedCoupons(Customer customer) throws CustomerDoesntOwnCoupon {
+        return couponRepository.findAllCustomerCoupons(customer.getId())
                 .orElseThrow(() -> new CustomerDoesntOwnCoupon("You have no coupons."));
     }
 
-    public Collection<Coupon> getPurchasedCouponsByType(CouponType couponType) throws CustomerDoesntOwnCoupon {
-        return couponRepository.findAllCustomerCouponsByType(loggedCustomer.getId(), couponType)
+    public Collection<Coupon> getPurchasedCouponsByType(Customer customer, CouponType couponType) throws CustomerDoesntOwnCoupon {
+        return couponRepository.findAllCustomerCouponsByType(customer.getId(), couponType)
                 .orElseThrow(() -> new CustomerDoesntOwnCoupon("You have no coupons by type: " + couponType + "."));
     }
 
-    public Collection<Coupon> getPurchasedCouponsByPrice(double price) throws CustomerDoesntOwnCoupon {
-        return couponRepository.findAllCustomerCouponsByPrice(loggedCustomer.getId(), price)
+    public Collection<Coupon> getPurchasedCouponsByPrice(Customer customer, double price) throws CustomerDoesntOwnCoupon {
+        return couponRepository.findAllCustomerCouponsByPrice(customer.getId(), price)
                 .orElseThrow(() -> new CustomerDoesntOwnCoupon("You have no coupons by type: " + price + "."));
     }
 

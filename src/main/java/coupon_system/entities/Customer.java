@@ -33,6 +33,9 @@ public class Customer implements Serializable, Comparable<Customer> {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     private Collection<Income> incomes;
 
+    @OneToOne
+    private Token token;
+
     public Customer() {
     }
 
@@ -106,6 +109,14 @@ public class Customer implements Serializable, Comparable<Customer> {
 
     public void purchaseCoupon(Coupon coupon) {
         coupons.add(coupon);
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
     }
 
     @Override

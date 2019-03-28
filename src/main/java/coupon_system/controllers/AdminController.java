@@ -1,34 +1,55 @@
 package coupon_system.controllers;
 
-import coupon_system.entities.Company;
-import coupon_system.entities.Coupon;
-import coupon_system.entities.Customer;
-import coupon_system.entities.Income;
+import coupon_system.entities.*;
+import coupon_system.enums.ClientType;
 import coupon_system.exceptions.CouponSystemException;
+import coupon_system.exceptions.LoginFailedException;
+import coupon_system.repositories.TokenRepository;
 import coupon_system.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 @RestController
 @RequestMapping(value = "admin")
+@Scope("session")
+@CrossOrigin(origins = "http://localhost:4200",
+        allowCredentials = "true",
+        methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = {"Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Access-Control-Allow-Origin", "Authorization"},
+        exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
 public class AdminController {
 
     private final AdminService adminService;
 
     @Autowired
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService,
+                           TokenRepository tokenRepository,
+                           HttpServletRequest request) throws LoginFailedException {
         this.adminService = adminService;
+
+        Cookie[] cookie = request.getCookies();
+        for (Cookie c : cookie) {
+            if (c.getName().equals("auth")) {
+                Token token = tokenRepository.findByClientTypeAndToken(ClientType.ADMIN, c.getValue());
+                if (token == null) {
+                    throw new LoginFailedException("Authorization is failed, please try again.");
+                }
+            }
+        }
     }
 
     @RequestMapping(path = "companies", method = RequestMethod.POST)
     public ResponseEntity<?> createCompany(@RequestBody Company company) {
         try {
             adminService.createCompany(company);
-            return new ResponseEntity<>(company, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -58,7 +79,7 @@ public class AdminController {
     public ResponseEntity<?> updateCompany(@RequestBody Company company) {
         try {
             adminService.updateCompany(company);
-            return new ResponseEntity<>(company, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -74,7 +95,7 @@ public class AdminController {
     public ResponseEntity<?> createCoupon(@RequestBody long companyId, Coupon coupon) {
         try {
             adminService.createCoupon(companyId, coupon);
-            return new ResponseEntity<>(coupon, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -104,7 +125,7 @@ public class AdminController {
     public ResponseEntity<?> updateCoupon(@RequestBody long companyId, Coupon coupon) {
         try {
             adminService.updateCoupon(companyId, coupon);
-            return new ResponseEntity<>(coupon, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -120,7 +141,7 @@ public class AdminController {
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
             adminService.createCustomer(customer);
-            return new ResponseEntity<>(customer, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -150,7 +171,7 @@ public class AdminController {
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
         try {
             adminService.updateCustomer(customer);
-            return new ResponseEntity<>(customer, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

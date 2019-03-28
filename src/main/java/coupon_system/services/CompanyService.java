@@ -23,13 +23,11 @@ import java.util.Collection;
 import java.util.Date;
 
 @Service
-@Scope("prototype")
-public class CompanyService extends CouponClientService implements Validations {
+public class CompanyService implements Validations {
 
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final IncomeRepository incomeRepository;
-    private Company loggedCompany;
 
     @Autowired
     public CompanyService(CompanyRepository companyRepository,
@@ -40,48 +38,45 @@ public class CompanyService extends CouponClientService implements Validations {
         this.incomeRepository = incomeRepository;
     }
 
-    @Override
-    public CouponClientService login(String username,
-                                     String password) throws LoginFailedException {
-        loggedCompany = companyRepository.login(username, password)
-                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again."));
-        return this;
+    public long login(String username,
+                      String password) throws LoginFailedException {
+        return companyRepository.login(username, password)
+                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again.")).getId();
     }
 
-    public void createCoupon(Coupon coupon) throws CouponTitleDuplicateException {
+    public void createCoupon(Company company, Coupon coupon) throws CouponTitleDuplicateException {
         this.isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
-        coupon.setCompany(loggedCompany);
+        coupon.setCompany(company);
         couponRepository.save(coupon);
 
-        incomeRepository.save(new Income(loggedCompany,
+        incomeRepository.save(new Income(company,
                 new Date(System.currentTimeMillis()),
-                IncomeType.COMPANY_CREATED_COUPON,
-                100));
+                IncomeType.COMPANY_CREATED_COUPON));
     }
 
-    public Coupon getCompanyCoupon(long couponId) throws CompanyDoesntOwnCoupon {
-        return couponRepository.findCompanyCoupon(loggedCompany.getId(), couponId)
+    public Coupon getCompanyCoupon(Company company, long couponId) throws CompanyDoesntOwnCoupon {
+        return couponRepository.findCompanyCoupon(company.getId(), couponId)
                 .orElseThrow(() -> new CompanyDoesntOwnCoupon("You don't own this coupon."));
     }
 
-    public Collection<Coupon> getAllCompanyCoupons() throws CouponSystemException {
-        return couponRepository.findAllCompanyCoupons(loggedCompany.getId())
+    public Collection<Coupon> getAllCompanyCoupons(Company company) throws CouponSystemException {
+        return couponRepository.findAllCompanyCoupons(company.getId())
                 .orElseThrow(() -> new CompanyDoesntOwnCoupon("You have no coupons."));
     }
 
-    public Collection<Coupon> getAllCompanyCouponsByType(CouponType couponType) throws CompanyDoesntOwnCoupon {
-        return couponRepository.findAllCompanyCouponsByType(loggedCompany.getId(), couponType)
+    public Collection<Coupon> getAllCompanyCouponsByType(Company company, CouponType couponType) throws CompanyDoesntOwnCoupon {
+        return couponRepository.findAllCompanyCouponsByType(company.getId(), couponType)
                 .orElseThrow(() -> new CompanyDoesntOwnCoupon("You have no coupons by type: " + couponType + "."));
     }
 
-    public Collection<Coupon> getAllCompanyCouponsByPrice(double price) throws CompanyDoesntOwnCoupon {
-        return couponRepository.findAllCompanyCouponsByPrice(loggedCompany.getId(), price)
-                .orElseThrow(() -> new CompanyDoesntOwnCoupon("You have no coupons by type: " + price + "."));
+    public Collection<Coupon> getAllCompanyCouponsByPrice(Company company, double price) throws CompanyDoesntOwnCoupon {
+        return couponRepository.findAllCompanyCouponsByPrice(company.getId(), price)
+                .orElseThrow(() -> new CompanyDoesntOwnCoupon("You have no coupons by price: " + price + "."));
     }
 
-    public void updateCoupon(Coupon coupon) throws CouponUnavaliableException, CompanyDoesntOwnCoupon, CouponExpiredException, CouponTitleDuplicateException {
+    public void updateCoupon(Company company, Coupon coupon) throws CouponUnavaliableException, CompanyDoesntOwnCoupon, CouponExpiredException, CouponTitleDuplicateException {
 
-        this.isCompanyOwnsCoupon(loggedCompany.getId(), coupon.getId(), couponRepository);
+        this.isCompanyOwnsCoupon(company.getId(), coupon.getId(), couponRepository);
         this.isCouponTitleDuplicate(coupon.getTitle(), couponRepository);
 
         // Checking if updating end date is not expired
@@ -98,10 +93,9 @@ public class CompanyService extends CouponClientService implements Validations {
 
                     couponRepository.save(updCoupon);
 
-                    incomeRepository.save(new Income(loggedCompany,
+                    incomeRepository.save(new Income(company,
                             new Date(System.currentTimeMillis()),
-                            IncomeType.COMPANY_UPDATED_COUPON,
-                            10));
+                            IncomeType.COMPANY_UPDATED_COUPON));
                 } else {
                     throw new CouponUnavaliableException("Not allowed to update price to less than 1.");
                 }
@@ -113,18 +107,17 @@ public class CompanyService extends CouponClientService implements Validations {
         }
     }
 
-    public void deleteCoupon(long couponId) throws CompanyDoesntOwnCoupon {
-        this.isCompanyOwnsCoupon(loggedCompany.getId(), couponId, couponRepository);
+    public void deleteCoupon(Company company, long couponId) throws CompanyDoesntOwnCoupon {
+        this.isCompanyOwnsCoupon(company.getId(), couponId, couponRepository);
         couponRepository.deleteById(couponId);
 
         incomeRepository.save(new Income(
                 new Date(System.currentTimeMillis()),
-                IncomeType.COMPANY_DELETED_COUPON,
-                1));
+                IncomeType.COMPANY_DELETED_COUPON));
     }
 
-    public Collection<Income> getCompanyIncomes() throws CouponSystemException {
-        return incomeRepository.findCompanyIncomes(loggedCompany.getId())
+    public Collection<Income> getCompanyIncomes(Company company) throws CouponSystemException {
+        return incomeRepository.findCompanyIncomes(company.getId())
                 .orElseThrow(() -> new CouponSystemException("There are no incomes of the companies."));
     }
 }

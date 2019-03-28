@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.servlet.http.Cookie;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -19,5 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT DISTINCT c FROM Customer c WHERE UPPER(c.name) LIKE UPPER(:name) AND  c.password = :password")
     Optional<Customer> login(String name, String password);
+
+    Customer getCustomerByToken(String token);
 
 }

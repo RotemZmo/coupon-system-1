@@ -4,6 +4,7 @@ import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
 import coupon_system.entities.Income;
+import coupon_system.enums.ClientType;
 import coupon_system.enums.IncomeType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
@@ -13,10 +14,7 @@ import coupon_system.exceptions.couponExceptions.CouponExpiredException;
 import coupon_system.exceptions.couponExceptions.CouponNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
 import coupon_system.exceptions.customerExceptions.CustomerNotExistsException;
-import coupon_system.repositories.CompanyRepository;
-import coupon_system.repositories.CouponRepository;
-import coupon_system.repositories.CustomerRepository;
-import coupon_system.repositories.IncomeRepository;
+import coupon_system.repositories.*;
 import coupon_system.utilities.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -26,30 +24,31 @@ import java.util.Collection;
 import java.util.Date;
 
 @Service
-@Scope("prototype")
-public class AdminService extends CouponClientService implements Validations {
+public class AdminService implements Validations {
 
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
     private final IncomeRepository incomeRepository;
+    private final TokenRepository tokenRepository;
 
     @Autowired
     public AdminService(CompanyRepository companyRepository,
                         CouponRepository couponRepository,
                         CustomerRepository customerRepository,
-                        IncomeRepository incomeRepository) {
+                        IncomeRepository incomeRepository,
+                        TokenRepository tokenRepository) {
         this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
         this.customerRepository = customerRepository;
         this.incomeRepository = incomeRepository;
+        this.tokenRepository = tokenRepository;
     }
 
-    @Override
-    public CouponClientService login(String username,
-                                     String password) throws LoginFailedException {
+    public long login(String username,
+                      String password) throws LoginFailedException {
         if (username.equalsIgnoreCase("admin") && password.equals("admin")) {
-            return this;
+            return 1;
         } else {
             throw new LoginFailedException("Authorization is failed, please try again.");
         }
@@ -81,6 +80,7 @@ public class AdminService extends CouponClientService implements Validations {
 
     public void deleteCompany(long companyId) {
         companyRepository.deleteById(companyId);
+        tokenRepository.deleteAllByClientTypeAndUserId(ClientType.COMPANY, companyId);
     }
 
     /**
@@ -94,8 +94,7 @@ public class AdminService extends CouponClientService implements Validations {
 
         incomeRepository.save(new Income(
                 new Date(System.currentTimeMillis()),
-                IncomeType.ADMIN_CREATED_COUPON,
-                100));
+                IncomeType.ADMIN_CREATED_COUPON));
     }
 
     public Coupon getCouponById(long couponId) throws CouponSystemException {
@@ -125,8 +124,7 @@ public class AdminService extends CouponClientService implements Validations {
 
                     incomeRepository.save(new Income(
                             new Date(System.currentTimeMillis()),
-                            IncomeType.ADMIN_UPDATED_COUPON,
-                            10));
+                            IncomeType.ADMIN_UPDATED_COUPON));
                 } else {
                     throw new CouponExpiredException("Not allowed to update price to less than 1.");
                 }
@@ -143,8 +141,7 @@ public class AdminService extends CouponClientService implements Validations {
 
         incomeRepository.save(new Income(
                 new Date(System.currentTimeMillis()),
-                IncomeType.ADMIN_DELETED_COUPON,
-                1));
+                IncomeType.ADMIN_DELETED_COUPON));
     }
 
     /**
@@ -173,6 +170,7 @@ public class AdminService extends CouponClientService implements Validations {
 
     public void deleteCustomer(long customerId) {
         customerRepository.deleteById(customerId);
+        tokenRepository.deleteAllByClientTypeAndUserId(ClientType.CUSTOMER, customerId);
     }
 
     /**

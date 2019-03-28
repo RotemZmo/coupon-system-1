@@ -30,35 +30,26 @@ public class Income implements Serializable, Comparable<Income> {
     @Enumerated(EnumType.STRING)
     private IncomeType description;
 
-    @Column(nullable = false)
-    private double amount;
-
     public Income(Company company,
                   Date date,
-                  IncomeType description,
-                  double amount) {
+                  IncomeType description) {
         this.company = company;
         this.date = date;
         this.description = description;
-        this.amount = amount;
     }
 
     public Income(Customer customer,
                   Date date,
-                  IncomeType description,
-                  double amount) {
+                  IncomeType description) {
         this.customer = customer;
         this.date = date;
         this.description = description;
-        this.amount = amount;
     }
 
     public Income(Date date,
-                  IncomeType description,
-                  double amount) {
+                  IncomeType description) {
         this.date = date;
         this.description = description;
-        this.amount = amount;
     }
 
     public Income() {
@@ -104,14 +95,6 @@ public class Income implements Serializable, Comparable<Income> {
         this.description = description;
     }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
     @Override
     public int compareTo(Income company) {
         return Long.compare(this.id, company.id);
@@ -142,7 +125,6 @@ public class Income implements Serializable, Comparable<Income> {
                 ", customer=" + customer +
                 ", date=" + date +
                 ", description=" + description +
-                ", amount=" + amount +
                 '}';
     }
 }

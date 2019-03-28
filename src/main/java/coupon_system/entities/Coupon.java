@@ -41,9 +41,6 @@ public class Coupon implements Serializable, Comparable<Coupon> {
     @Column(nullable = false)
     private double price;
 
-    @Column(nullable = false)
-    private String image;
-
     @ManyToOne
     private Company company;
 
@@ -63,7 +60,6 @@ public class Coupon implements Serializable, Comparable<Coupon> {
                   CouponType couponType,
                   String message,
                   double price,
-                  String image,
                   Company company) {
         this.title = title;
         this.startDate = startDate;
@@ -72,7 +68,6 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.couponType = couponType;
         this.message = message;
         this.price = price;
-        this.image = image;
         this.company = company;
     }
 
@@ -82,8 +77,7 @@ public class Coupon implements Serializable, Comparable<Coupon> {
                   int amount,
                   CouponType couponType,
                   String message,
-                  double price,
-                  String image) {
+                  double price) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -91,14 +85,12 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.couponType = couponType;
         this.message = message;
         this.price = price;
-        this.image = image;
     }
 
     public Coupon(long id,
                   String title,
                   Date startDate,
                   Date endDate,
-                  int amount,
                   CouponType couponType,
                   String message,
                   double price,
@@ -112,7 +104,6 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.couponType = couponType;
         this.message = message;
         this.price = price;
-        this.image = image;
         this.company = company;
     }
 
@@ -123,8 +114,7 @@ public class Coupon implements Serializable, Comparable<Coupon> {
                   int amount,
                   CouponType couponType,
                   String message,
-                  double price,
-                  String image) {
+                  double price) {
         this.id = id;
         this.title = title;
         this.startDate = startDate;
@@ -133,7 +123,6 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.couponType = couponType;
         this.message = message;
         this.price = price;
-        this.image = image;
     }
 
     public long getId() {
@@ -200,14 +189,6 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.price = price;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public Company getCompany() {
         return company;
     }
@@ -250,10 +231,9 @@ public class Coupon implements Serializable, Comparable<Coupon> {
                         "Coupon type: %s, " +
                         "Message: %s, " +
                         "Price: %f, " +
-                        "Image: %s, " +
                         "Start date: %s, " +
                         "End date: %s",
-                id, title, amount, couponType, message, price, image, startDate, endDate);
+                id, title, amount, couponType, message, price, startDate, endDate);
     }
 
 }

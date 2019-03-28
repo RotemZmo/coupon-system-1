@@ -4,9 +4,8 @@ import coupon_system.enums.ClientType;
 import coupon_system.exceptions.LoginFailedException;
 import coupon_system.services.AdminService;
 import coupon_system.services.CompanyService;
-import coupon_system.services.CouponClientService;
 import coupon_system.services.CustomerService;
-import coupon_system.utilities.DailyCouponExpirationTask;
+import coupon_system.utilities.DailyExpirationTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,23 +15,24 @@ public class CouponSystem {
     private final AdminService adminService;
     private final CompanyService companyService;
     private final CustomerService customerService;
-    private final DailyCouponExpirationTask task;
+    private final DailyExpirationTask task;
     private boolean firstCleaning = true;
 
     @Autowired
     public CouponSystem(AdminService adminService,
                         CompanyService companyService,
                         CustomerService customerService,
-                        DailyCouponExpirationTask task) {
+                        DailyExpirationTask task) {
         this.adminService = adminService;
         this.companyService = companyService;
         this.customerService = customerService;
         this.task = task;
     }
 
-    public CouponClientService login(String username,
-                                     String password,
-                                     ClientType clientType) throws LoginFailedException {
+    public long login(String username,
+                      String password,
+                      ClientType clientType) throws LoginFailedException {
+
         if (firstCleaning) task.start();
         firstCleaning = false;
 
