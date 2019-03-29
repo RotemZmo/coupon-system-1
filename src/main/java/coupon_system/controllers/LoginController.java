@@ -17,9 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("login")
-@CrossOrigin(value = "http://localhost:4200",
-        allowCredentials = "true",
-        methods = {RequestMethod.POST, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class LoginController {
 
     private final CouponSystem couponSystem;
@@ -70,6 +68,7 @@ public class LoginController {
     private ResponseEntity<?> getResponseEntity(HttpServletResponse response, Token token) {
         tokenRepository.save(token);
         Cookie cookie = new Cookie("auth", token.getToken());
+        cookie.setMaxAge(/* 2 months */ 5000000);
         response.addCookie(cookie);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

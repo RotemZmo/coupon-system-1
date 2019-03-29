@@ -68,11 +68,6 @@ export class CreateCouponComponent implements OnInit {
         Validators.min(1)
       ]),
 
-      image: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(20)
-      ]),
-
       companyId: new FormControl(null, [
         Validators.required
       ])
@@ -89,7 +84,6 @@ export class CreateCouponComponent implements OnInit {
       couponType: this.form.value.couponType,
       message: this.form.value.message,
       price: this.form.value.price,
-      image: this.form.value.image,
       companyId: this.form.value.companyId
     }
 

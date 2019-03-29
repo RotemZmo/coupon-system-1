@@ -18,8 +18,8 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping(value = "admin")
-@Scope("session")
-@CrossOrigin(value = "http://localhost:4200",
+@Scope("prototype")
+@CrossOrigin(origins = "http://localhost:4200",
         allowCredentials = "true",
         methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
         allowedHeaders = {"Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Access-Control-Allow-Origin", "Authorization"},
@@ -39,6 +39,7 @@ public class AdminController {
             if (c.getName().equals("auth")) {
                 Token token = tokenRepository.findByClientTypeAndToken(ClientType.ADMIN, c.getValue());
                 if (token == null) {
+                    System.out.println("THROWN TOKEN = NULL");
                     throw new LoginFailedException("Authorization is failed, please try again.");
                 }
             }

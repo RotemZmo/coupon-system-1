@@ -7,7 +7,6 @@ export interface Coupon {
   couponType?: string
   message?: string
   price?: number
-  image?: string
   companyId?: number
 }
 

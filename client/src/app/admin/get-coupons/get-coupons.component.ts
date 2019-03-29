@@ -22,7 +22,7 @@ import {DatePipe} from "@angular/common"
 })
 export class GetCouponsComponent implements OnInit {
 
-  couponColumns: string[] = ['title', 'startDate', 'endDate', 'amount', 'couponType', 'message', 'price', 'image', 'companyId']
+  couponColumns: string[] = ['title', 'startDate', 'endDate', 'amount', 'couponType', 'message', 'price', 'companyId']
   couponSource: MatTableDataSource<Coupon>
   expandedElement: Company | null
 
@@ -86,11 +86,6 @@ export class GetCouponsComponent implements OnInit {
         Validators.min(1)
       ]),
 
-      image: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(20)
-      ]),
-
       companyId: new FormControl(null, [
         Validators.required
       ])
@@ -120,7 +115,6 @@ export class GetCouponsComponent implements OnInit {
       couponType: this.form.value.couponType,
       message: this.form.value.message,
       price: this.form.value.price,
-      image: this.form.value.image,
       companyId: this.form.value.companyId
     }
 

@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("registration")
-@CrossOrigin(value = "http://localhost:4200",
-        allowCredentials = "true",
-        methods = {RequestMethod.POST, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class RegistrationController {
 
     private final RegistrationService registration;

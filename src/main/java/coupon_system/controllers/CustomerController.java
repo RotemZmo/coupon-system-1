@@ -23,16 +23,14 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("customer")
-@Scope("session")
-@CrossOrigin(value = "http://localhost:4200",
-        allowCredentials = "true",
-        methods = {RequestMethod.GET, RequestMethod.OPTIONS},
-        allowedHeaders = {"Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Access-Control-Allow-Origin", "Authorization"},
-        exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
+@Scope("prototype")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class CustomerController {
 
     private final CustomerService customerService;
-    private Customer customer;
+    private final CustomerRepository customerRepository;
+    private final TokenRepository tokenRepository;
+    private final HttpServletRequest request;
 
     @Autowired
     public CustomerController(CustomerService customerService,
@@ -40,23 +38,15 @@ public class CustomerController {
                               TokenRepository tokenRepository,
                               HttpServletRequest request) {
         this.customerService = customerService;
-
-        Token token = null;
-        Cookie[] cookie = request.getCookies();
-        for (Cookie c : cookie) {
-            if (c.getName().equals("auth")) {
-                token = tokenRepository.findByClientTypeAndToken(ClientType.CUSTOMER, c.getValue());
-            }
-        }
-        if (token != null) {
-            this.customer = customerRepository.findById(token.getUserId()).get();
-        }
+        this.customerRepository = customerRepository;
+        this.tokenRepository = tokenRepository;
+        this.request = request;
     }
 
     @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.GET)
     public ResponseEntity<?> purchaseCoupon(@PathVariable int couponId) {
         try {
-            customerService.purchaseCoupon(customer, couponId);
+            customerService.purchaseCoupon(getCustomer(), couponId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -66,7 +56,7 @@ public class CustomerController {
     @RequestMapping(path = "coupons", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCustomerCoupons() {
         try {
-            Collection<Coupon> coupons = customerService.getPurchasedCoupons(customer);
+            Collection<Coupon> coupons = customerService.getPurchasedCoupons(getCustomer());
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
@@ -76,7 +66,7 @@ public class CustomerController {
     @RequestMapping(path = "coupons-by-type/{couponType}", method = RequestMethod.GET)
     public ResponseEntity<?> getPurchasedCouponsByType(@PathVariable CouponType couponType) {
         try {
-            Collection<Coupon> coupons = customerService.getPurchasedCouponsByType(customer, couponType);
+            Collection<Coupon> coupons = customerService.getPurchasedCouponsByType(getCustomer(), couponType);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
@@ -86,7 +76,7 @@ public class CustomerController {
     @RequestMapping(path = "coupons-by-price/{price}", method = RequestMethod.GET)
     public ResponseEntity<?> getPurchasedCouponsByPrice(@PathVariable double price) {
         try {
-            Collection<Coupon> coupons = customerService.getPurchasedCouponsByPrice(customer, price);
+            Collection<Coupon> coupons = customerService.getPurchasedCouponsByPrice(getCustomer(), price);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
@@ -103,4 +93,18 @@ public class CustomerController {
         }
     }
 
+    private Customer getCustomer() {
+        Customer customer = null;
+        Token token = null;
+        Cookie[] cookie = request.getCookies();
+        for (Cookie c : cookie) {
+            if (c.getName().equals("auth")) {
+                token = tokenRepository.findByClientTypeAndToken(ClientType.CUSTOMER, c.getValue());
+            }
+        }
+        if (token != null) {
+            customer = customerRepository.findById(token.getUserId()).get();
+        }
+        return customer;
+    }
 }

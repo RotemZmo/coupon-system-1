@@ -3,6 +3,7 @@ package coupon_system.utilities;
 import coupon_system.entities.Token;
 import coupon_system.repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -14,6 +15,7 @@ import java.io.IOException;
 
 @Component
 @WebFilter("/*")
+@Scope("prototype")
 public class LoginFilter implements Filter {
 
     private TokenRepository tokenRepository;
@@ -42,9 +44,6 @@ public class LoginFilter implements Filter {
                             }
                         }
                     }
-                } else {
-                    res.sendRedirect("http://localhost:4200");
-                    return;
                 }
             }
         }

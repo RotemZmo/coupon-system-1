@@ -49,11 +49,6 @@ export class CreateCompanyCouponComponent {
       Validators.min(1)
     ]),
 
-    image: new FormControl(null, [
-      Validators.required,
-      Validators.maxLength(20)
-    ])
-
   })
 
   matcher = new MyErrorStateMatcher()
@@ -81,7 +76,6 @@ export class CreateCompanyCouponComponent {
       couponType: this.form.value.couponType,
       message: this.form.value.message,
       price: this.form.value.price,
-      image: this.form.value.image
     }
 
     this.company.createCoupon(coupon).subscribe(

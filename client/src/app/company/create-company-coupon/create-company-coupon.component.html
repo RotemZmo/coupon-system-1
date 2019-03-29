@@ -105,16 +105,5 @@
       Price is <strong>required</strong>
     </mat-error>
   </mat-form-field>
-  <br>
-  <mat-form-field class="example-full-width">
-    <input matInput
-           placeholder="Image"
-           [formControl]="form.get('image')"
-           [errorStateMatcher]="matcher"
-    >
-    <mat-error *ngIf="form.get('image').hasError('required')">
-      Image is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
   <button mat-button class="button2" [disabled]="form.invalid">Add</button>
 </form>

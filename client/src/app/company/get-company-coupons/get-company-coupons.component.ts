@@ -22,7 +22,7 @@ import {DatePipe} from "@angular/common"
 })
 export class GetCompanyCouponsComponent implements OnInit {
 
-  couponColumns: string[] = ['title', 'startDate', 'endDate', 'amount', 'couponType', 'message', 'price', 'image']
+  couponColumns: string[] = ['title', 'startDate', 'endDate', 'amount', 'couponType', 'message', 'price']
   couponSource: MatTableDataSource<Coupon>
   expandedElement: Company | null
 
