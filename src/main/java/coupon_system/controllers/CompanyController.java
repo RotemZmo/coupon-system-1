@@ -23,7 +23,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping(path = "company")
-@Scope("prototype")
+@Scope("request")
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class CompanyController {
 

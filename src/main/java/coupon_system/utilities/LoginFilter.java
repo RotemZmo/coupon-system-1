@@ -15,7 +15,6 @@ import java.io.IOException;
 
 @Component
 @WebFilter("/*")
-@Scope("prototype")
 public class LoginFilter implements Filter {
 
     private TokenRepository tokenRepository;

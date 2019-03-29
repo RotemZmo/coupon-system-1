@@ -1,6 +1,5 @@
 package coupon_system;
 
-import coupon_system.exceptions.CouponSystemException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
