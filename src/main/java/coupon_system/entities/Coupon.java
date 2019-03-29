@@ -41,7 +41,7 @@ public class Coupon implements Serializable, Comparable<Coupon> {
     @Column(nullable = false)
     private double price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("customer")
+@RequestMapping(path = "customer")
 @Scope("prototype")
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class CustomerController {
@@ -96,8 +96,8 @@ public class CustomerController {
     private Customer getCustomer() {
         Customer customer = null;
         Token token = null;
-        Cookie[] cookie = request.getCookies();
-        for (Cookie c : cookie) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie c : cookies) {
             if (c.getName().equals("auth")) {
                 token = tokenRepository.findByClientTypeAndToken(ClientType.CUSTOMER, c.getValue());
             }

@@ -22,13 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 @RestController
-@RequestMapping(value = "company")
+@RequestMapping(path = "company")
 @Scope("prototype")
-@CrossOrigin(origins = "http://localhost:4200",
-        allowCredentials = "true",
-        methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
-        allowedHeaders = {"Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Access-Control-Allow-Origin", "Authorization"},
-        exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class CompanyController {
 
     private final CompanyService companyService;
@@ -130,8 +126,8 @@ public class CompanyController {
     private Company getCompany() {
         Company company = null;
         Token token = null;
-        Cookie[] cookie = request.getCookies();
-        for (Cookie c : cookie) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie c : cookies) {
             if (c.getName().equals("auth")) {
                 token = tokenRepository.findByClientTypeAndToken(ClientType.COMPANY, c.getValue());
             }

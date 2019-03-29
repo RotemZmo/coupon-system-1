@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 @ServletComponentScan
 public class CouponSystemApplication {
 
-    public static void main(String[] args) throws CouponSystemException {
+    public static void main(String[] args) {
         SpringApplication.run(CouponSystemApplication.class, args);
     }
 }
