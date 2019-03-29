@@ -26,7 +26,7 @@ import java.util.Collection;
 @Scope("session")
 @CrossOrigin(value = "http://localhost:4200",
         allowCredentials = "true",
-        methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+        methods = {RequestMethod.GET, RequestMethod.OPTIONS},
         allowedHeaders = {"Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Access-Control-Allow-Origin", "Authorization"},
         exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
 public class CustomerController {
@@ -69,7 +69,7 @@ public class CustomerController {
             Collection<Coupon> coupons = customerService.getPurchasedCoupons(customer);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
     }
 
@@ -79,7 +79,7 @@ public class CustomerController {
             Collection<Coupon> coupons = customerService.getPurchasedCouponsByType(customer, couponType);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
     }
 
@@ -89,7 +89,7 @@ public class CustomerController {
             Collection<Coupon> coupons = customerService.getPurchasedCouponsByPrice(customer, price);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
     }
 
@@ -99,7 +99,7 @@ public class CustomerController {
             Collection<Coupon> coupons = customerService.getAllAvailableCoupons();
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CouponUnavaliableException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
     }
 

@@ -5,26 +5,21 @@ import coupon_system.enums.ClientType;
 import coupon_system.exceptions.LoginFailedException;
 import coupon_system.main_app.CouponSystem;
 import coupon_system.repositories.TokenRepository;
+import coupon_system.utilities.DateGenerator;
 import coupon_system.utilities.SecureTokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Calendar;
-import java.util.Date;
 
 @RestController
 @RequestMapping("login")
-@Scope("session")
 @CrossOrigin(value = "http://localhost:4200",
         allowCredentials = "true",
-        methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
-        allowedHeaders = {"Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Access-Control-Allow-Origin", "Authorization"},
-        exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
+        methods = {RequestMethod.POST, RequestMethod.OPTIONS})
 public class LoginController {
 
     private final CouponSystem couponSystem;
@@ -42,11 +37,8 @@ public class LoginController {
             case ADMIN:
                 try {
                     if (couponSystem.login(user.getName(), user.getPassword(), user.getClientType()) == 1) {
-                        Token token = new Token(ClientType.ADMIN, getDateAfterMonths(2), SecureTokenGenerator.nextToken());
-                        tokenRepository.save(token);
-                        Cookie cookie = new Cookie("auth", token.getToken());
-                        response.addCookie(cookie);
-                        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+                        Token token = new Token(ClientType.ADMIN, DateGenerator.getDateAfterMonths(2), SecureTokenGenerator.nextToken());
+                        return getResponseEntity(response, token);
                     }
                 } catch (LoginFailedException e) {
                     e.printStackTrace();
@@ -55,11 +47,8 @@ public class LoginController {
             case COMPANY:
                 try {
                     long companyId = couponSystem.login(user.getName(), user.getPassword(), user.getClientType());
-                    Token token = new Token(companyId, ClientType.COMPANY, getDateAfterMonths(2), SecureTokenGenerator.nextToken());
-                    tokenRepository.save(token);
-                    Cookie cookie = new Cookie("auth", token.getToken());
-                    response.addCookie(cookie);
-                    return new ResponseEntity<>(HttpStatus.ACCEPTED);
+                    Token token = new Token(companyId, ClientType.COMPANY, DateGenerator.getDateAfterMonths(2), SecureTokenGenerator.nextToken());
+                    return getResponseEntity(response, token);
                 } catch (LoginFailedException e) {
                     e.printStackTrace();
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -67,11 +56,8 @@ public class LoginController {
             case CUSTOMER:
                 try {
                     long customerId = couponSystem.login(user.getName(), user.getPassword(), user.getClientType());
-                    Token token = new Token(customerId, ClientType.CUSTOMER, getDateAfterMonths(2), SecureTokenGenerator.nextToken());
-                    tokenRepository.save(token);
-                    Cookie cookie = new Cookie("auth", token.getToken());
-                    response.addCookie(cookie);
-                    return new ResponseEntity<>(HttpStatus.ACCEPTED);
+                    Token token = new Token(customerId, ClientType.CUSTOMER, DateGenerator.getDateAfterMonths(2), SecureTokenGenerator.nextToken());
+                    return getResponseEntity(response, token);
                 } catch (LoginFailedException e) {
                     e.printStackTrace();
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -81,11 +67,13 @@ public class LoginController {
         }
     }
 
-    private Date getDateAfterMonths(int months) {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, months);
-        return cal.getTime();
+    private ResponseEntity<?> getResponseEntity(HttpServletResponse response, Token token) {
+        tokenRepository.save(token);
+        Cookie cookie = new Cookie("auth", token.getToken());
+        response.addCookie(cookie);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
 }
 
 class User {

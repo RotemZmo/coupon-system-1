@@ -13,7 +13,7 @@ export class AuthorisationService {
 
   private logUrl = 'http://localhost:8080/login'
   private regCompanyUrl = 'http://localhost:8080/registration/companies'
-  private regCustomerUrl = 'http://localhost:8080/coupon-system/registration/customers'
+  private regCustomerUrl = 'http://localhost:8080/registration/customers'
 
   constructor(private http: HttpClient,
               private errorService: ErrorService,

@@ -24,7 +24,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(value = "company")
 @Scope("session")
-@CrossOrigin(origins = "http://localhost:4200",
+@CrossOrigin(value = "http://localhost:4200",
         allowCredentials = "true",
         methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
         allowedHeaders = {"Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Access-Control-Allow-Origin", "Authorization"},
