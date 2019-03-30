@@ -15,6 +15,7 @@ import coupon_system.exceptions.couponExceptions.CouponNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
 import coupon_system.exceptions.customerExceptions.CustomerNotExistsException;
 import coupon_system.repositories.*;
+import coupon_system.utilities.DateGenerator;
 import coupon_system.utilities.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -94,6 +95,7 @@ public class AdminService implements Validations {
 
         incomeRepository.save(new Income(
                 new Date(System.currentTimeMillis()),
+                DateGenerator.getDateAfterMonths(6),
                 IncomeType.ADMIN_CREATED_COUPON));
     }
 
@@ -124,6 +126,7 @@ public class AdminService implements Validations {
 
                     incomeRepository.save(new Income(
                             new Date(System.currentTimeMillis()),
+                            DateGenerator.getDateAfterMonths(6),
                             IncomeType.ADMIN_UPDATED_COUPON));
                 } else {
                     throw new CouponExpiredException("Not allowed to update price to less than 1.");
@@ -141,6 +144,7 @@ public class AdminService implements Validations {
 
         incomeRepository.save(new Income(
                 new Date(System.currentTimeMillis()),
+                DateGenerator.getDateAfterMonths(6),
                 IncomeType.ADMIN_DELETED_COUPON));
     }
 

@@ -24,7 +24,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Income")
-    void clearIncomes();
+    @Query("DELETE FROM Income i WHERE i.expDate < CURRENT_DATE")
+    void deleteExpiredIncomes();
 
 }

@@ -27,29 +27,39 @@ public class Income implements Serializable, Comparable<Income> {
     private Date date;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date expDate;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private IncomeType description;
 
     public Income(Company company,
                   Date date,
+                  Date expDate,
                   IncomeType description) {
         this.company = company;
         this.date = date;
         this.description = description;
+        this.expDate = expDate;
     }
 
     public Income(Customer customer,
                   Date date,
+                  Date expDate,
                   IncomeType description) {
         this.customer = customer;
         this.date = date;
         this.description = description;
+        this.expDate = expDate;
     }
 
     public Income(Date date,
+                  Date expDate,
                   IncomeType description) {
         this.date = date;
         this.description = description;
+        this.expDate = expDate;
     }
 
     public Income() {
@@ -85,6 +95,14 @@ public class Income implements Serializable, Comparable<Income> {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Date getExpDate() {
+        return expDate;
+    }
+
+    public void setExpDate(Date expDate) {
+        this.expDate = expDate;
     }
 
     public IncomeType getDescription() {

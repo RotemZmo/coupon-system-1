@@ -1,6 +1,7 @@
 package coupon_system.utilities;
 
 import coupon_system.repositories.CouponRepository;
+import coupon_system.repositories.IncomeRepository;
 import coupon_system.repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,12 +13,15 @@ public class DailyExpirationTask extends Thread {
 
     private final CouponRepository couponRepository;
     private final TokenRepository tokenRepository;
+    private final IncomeRepository incomeRepository;
 
     @Autowired
     public DailyExpirationTask(CouponRepository couponRepository,
-                               TokenRepository tokenRepository) {
+                               TokenRepository tokenRepository,
+                               IncomeRepository incomeRepository) {
         this.couponRepository = couponRepository;
-        this.tokenRepository= tokenRepository;
+        this.tokenRepository = tokenRepository;
+        this.incomeRepository = incomeRepository;
     }
 
     @Override
@@ -26,6 +30,7 @@ public class DailyExpirationTask extends Thread {
             try {
                 couponRepository.deleteExpiredCoupons();
                 tokenRepository.deleteExpiredTokens();
+                incomeRepository.deleteExpiredIncomes();
                 TimeUnit.DAYS.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();

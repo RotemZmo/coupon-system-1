@@ -14,9 +14,9 @@ import coupon_system.exceptions.couponExceptions.CouponUnavaliableException;
 import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CouponRepository;
 import coupon_system.repositories.IncomeRepository;
+import coupon_system.utilities.DateGenerator;
 import coupon_system.utilities.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -51,6 +51,7 @@ public class CompanyService implements Validations {
 
         incomeRepository.save(new Income(company,
                 new Date(System.currentTimeMillis()),
+                DateGenerator.getDateAfterMonths(6),
                 IncomeType.COMPANY_CREATED_COUPON));
     }
 
@@ -95,6 +96,7 @@ public class CompanyService implements Validations {
 
                     incomeRepository.save(new Income(company,
                             new Date(System.currentTimeMillis()),
+                            DateGenerator.getDateAfterMonths(6),
                             IncomeType.COMPANY_UPDATED_COUPON));
                 } else {
                     throw new CouponUnavaliableException("Not allowed to update price to less than 1.");
@@ -113,6 +115,7 @@ public class CompanyService implements Validations {
 
         incomeRepository.save(new Income(
                 new Date(System.currentTimeMillis()),
+                DateGenerator.getDateAfterMonths(6),
                 IncomeType.COMPANY_DELETED_COUPON));
     }
 

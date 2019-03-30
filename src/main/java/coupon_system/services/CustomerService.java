@@ -14,6 +14,7 @@ import coupon_system.exceptions.customerExceptions.CustomerDoesntOwnCoupon;
 import coupon_system.repositories.CouponRepository;
 import coupon_system.repositories.CustomerRepository;
 import coupon_system.repositories.IncomeRepository;
+import coupon_system.utilities.DateGenerator;
 import coupon_system.utilities.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,7 @@ public class CustomerService implements Validations {
 
                 incomeRepository.save(new Income(customer,
                         new Date(System.currentTimeMillis()),
+                        DateGenerator.getDateAfterMonths(6),
                         IncomeType.CUSTOMER_PURCHASED_COUPON));
             } else {
                 throw new CouponUnavaliableException("This coupon is not available");
