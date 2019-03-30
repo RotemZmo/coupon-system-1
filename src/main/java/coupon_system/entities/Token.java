@@ -1,13 +1,17 @@
 package coupon_system.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import coupon_system.enums.ClientType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-public class Token {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Token implements Serializable, Comparable<Token> {
 
     @Id
     @GeneratedValue
@@ -86,6 +90,11 @@ public class Token {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Override
+    public int compareTo(Token o) {
+        return Long.compare(this.id, o.id);
     }
 
     @Override

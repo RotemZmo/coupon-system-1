@@ -54,7 +54,7 @@ public class CompanyController {
     }
 
     @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCompanyCoupon(@PathVariable int couponId) {
+    public ResponseEntity<?> getCompanyCoupon(@PathVariable long couponId) {
         try {
             Coupon coupon = companyService.getCompanyCoupon(getCompany(), couponId);
             return new ResponseEntity<>(coupon, HttpStatus.OK);
@@ -104,7 +104,7 @@ public class CompanyController {
     }
 
     @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCoupon(@PathVariable int couponId) {
+    public ResponseEntity<?> deleteCoupon(@PathVariable long couponId) {
         try {
             companyService.deleteCoupon(getCompany(), couponId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

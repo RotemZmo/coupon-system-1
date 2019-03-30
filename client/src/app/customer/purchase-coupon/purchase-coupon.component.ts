@@ -20,7 +20,7 @@ import {Company} from "../../models/company"
 })
 export class PurchaseCouponComponent implements OnInit {
 
-  couponColumns: string[] = ['title', 'startDate', 'endDate', 'amount', 'couponType', 'message', 'price', 'image']
+  couponColumns: string[] = ['title', 'startDate', 'endDate', 'amount', 'couponType', 'message', 'price']
   couponSource: MatTableDataSource<Coupon>
   expandedElement: Company | null
 

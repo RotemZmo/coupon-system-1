@@ -44,7 +44,7 @@ public class CustomerController {
     }
 
     @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.GET)
-    public ResponseEntity<?> purchaseCoupon(@PathVariable int couponId) {
+    public ResponseEntity<?> purchaseCoupon(@PathVariable long couponId) {
         try {
             customerService.purchaseCoupon(getCustomer(), couponId);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -59,7 +59,7 @@ public class CustomerController {
             Collection<Coupon> coupons = customerService.getPurchasedCoupons(getCustomer());
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -69,7 +69,7 @@ public class CustomerController {
             Collection<Coupon> coupons = customerService.getPurchasedCouponsByType(getCustomer(), couponType);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -79,7 +79,7 @@ public class CustomerController {
             Collection<Coupon> coupons = customerService.getPurchasedCouponsByPrice(getCustomer(), price);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CustomerDoesntOwnCoupon e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -89,7 +89,7 @@ public class CustomerController {
             Collection<Coupon> coupons = customerService.getAllAvailableCoupons();
             return new ResponseEntity<>(coupons, HttpStatus.OK);
         } catch (CouponUnavaliableException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

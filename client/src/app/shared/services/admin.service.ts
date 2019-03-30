@@ -40,7 +40,7 @@ export class AdminService {
   }
 
   public createCoupon(coupon: Coupon): Observable<Coupon> {
-    return this.http.post<Coupon>(this.couponUrl, coupon, {withCredentials: true}).pipe(
+    return this.http.post<Coupon>(this.couponUrl + '/' + coupon.companyId, coupon, {withCredentials: true}).pipe(
       catchError(err => this.errorService.errorHandler(err)))
   }
 
@@ -50,7 +50,7 @@ export class AdminService {
   }
 
   public updateCoupon(coupon: Coupon): Observable<Coupon> {
-    return this.http.put<Coupon>(this.couponUrl, coupon, {withCredentials: true}).pipe(
+    return this.http.put<Coupon>(this.couponUrl + '/' + coupon.companyId, coupon, {withCredentials: true}).pipe(
       catchError(err => this.errorService.errorHandler(err)))
   }
 

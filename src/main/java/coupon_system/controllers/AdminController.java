@@ -35,6 +35,9 @@ public class AdminController {
         this.request = request;
     }
 
+    /**
+     * COMPANY methods
+     */
     @RequestMapping(path = "companies", method = RequestMethod.POST)
     public ResponseEntity<?> createCompany(@RequestBody Company company) {
         try {
@@ -46,8 +49,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "companies-by-id/{companyId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCompanyById(@PathVariable int companyId) {
+    @RequestMapping(path = "companies/{companyId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCompanyById(@PathVariable long companyId) {
         try {
             cookieCheck();
             Company company = adminService.getCompanyById(companyId);
@@ -80,7 +83,7 @@ public class AdminController {
     }
 
     @RequestMapping(path = "companies/{companyId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCompany(@PathVariable int companyId) {
+    public ResponseEntity<?> deleteCompany(@PathVariable long companyId) {
         try {
             cookieCheck();
             adminService.deleteCompany(companyId);
@@ -90,8 +93,11 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "coupons", method = RequestMethod.POST)
-    public ResponseEntity<?> createCoupon(@RequestBody long companyId, Coupon coupon) {
+    /**
+     * COUPON methods
+     */
+    @RequestMapping(path = "coupons/{companyId}", method = RequestMethod.POST)
+    public ResponseEntity<?> createCoupon(@RequestBody Coupon coupon, @PathVariable long companyId) {
         try {
             cookieCheck();
             adminService.createCoupon(companyId, coupon);
@@ -101,8 +107,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "coupons-by-id/{couponId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCouponById(@PathVariable int couponId) {
+    @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCouponById(@PathVariable long couponId) {
         try {
             cookieCheck();
             Coupon coupon = adminService.getCouponById(couponId);
@@ -123,8 +129,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "coupons", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateCoupon(@RequestBody long companyId, Coupon coupon) {
+    @RequestMapping(path = "coupons/{companyId}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon, @PathVariable long companyId) {
         try {
             cookieCheck();
             adminService.updateCoupon(companyId, coupon);
@@ -135,7 +141,7 @@ public class AdminController {
     }
 
     @RequestMapping(path = "coupons/{couponId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCoupon(@PathVariable int couponId) {
+    public ResponseEntity<?> deleteCoupon(@PathVariable long couponId) {
         try {
             cookieCheck();
             adminService.deleteCoupon(couponId);
@@ -145,6 +151,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * CUSTOMER methods
+     */
     @RequestMapping(path = "customers", method = RequestMethod.POST)
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
@@ -156,8 +165,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "customers-by-id/{customerId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
+    @RequestMapping(path = "customers/{customerId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCustomerById(@PathVariable long customerId) {
         try {
             cookieCheck();
             Customer customer = adminService.getCustomerById(customerId);
@@ -190,7 +199,7 @@ public class AdminController {
     }
 
     @RequestMapping(path = "customers/{customerId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable long customerId) {
         try {
             cookieCheck();
             adminService.deleteCustomer(customerId);
@@ -200,6 +209,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * INCOME methods
+     */
     @RequestMapping(path = "incomes", method = RequestMethod.GET)
     public ResponseEntity<?> getAllIncomes() {
         try {
