@@ -4,12 +4,13 @@ import coupon_system.entities.Company;
 import coupon_system.entities.Coupon;
 import coupon_system.entities.Customer;
 import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
+import coupon_system.exceptions.companyExceptions.CompanyEmailDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNameDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
 import coupon_system.exceptions.customerExceptions.CustomerAlreadyHasCouponException;
-import coupon_system.exceptions.customerExceptions.CustomerNameDuplicateException;
+import coupon_system.exceptions.customerExceptions.CustomerEmailDuplicateException;
 import coupon_system.exceptions.customerExceptions.CustomerNotExistsException;
 import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CouponRepository;
@@ -44,10 +45,18 @@ public interface Validations {
         }
     }
 
-    default void isCustomerNameDuplicate(String customerName, CustomerRepository customerRepository) throws CustomerNameDuplicateException {
-        Optional<Customer> isCustomerNameDuplicate = customerRepository.findByName(customerName);
-        if (isCustomerNameDuplicate.isPresent()) {
-            throw new CustomerNameDuplicateException("Customer name: " + customerName
+    default void isCompanyEmailDuplicate(String companyEmail, CompanyRepository companyRepository) throws CompanyEmailDuplicateException {
+        Optional<Company> isCompanyEmailDuplicate = companyRepository.findByEmail(companyEmail);
+        if (isCompanyEmailDuplicate.isPresent()) {
+            throw new CompanyEmailDuplicateException("Company email: " + companyEmail
+                    + " already exists.");
+        }
+    }
+
+    default void isCustomerEmailDuplicate(String customerEmail, CustomerRepository customerRepository) throws CustomerEmailDuplicateException {
+        Optional<Customer> isCustomerEmailDuplicate = customerRepository.findByEmail(customerEmail);
+        if (isCustomerEmailDuplicate.isPresent()) {
+            throw new CustomerEmailDuplicateException("Customer email: " + customerEmail
                     + " already exists.");
         }
     }

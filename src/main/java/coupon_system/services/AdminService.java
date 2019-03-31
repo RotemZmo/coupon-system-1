@@ -8,17 +8,18 @@ import coupon_system.enums.ClientType;
 import coupon_system.enums.IncomeType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
+import coupon_system.exceptions.companyExceptions.CompanyEmailDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNameDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
 import coupon_system.exceptions.couponExceptions.CouponNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
+import coupon_system.exceptions.customerExceptions.CustomerEmailDuplicateException;
 import coupon_system.exceptions.customerExceptions.CustomerNotExistsException;
 import coupon_system.repositories.*;
 import coupon_system.utilities.DateGenerator;
 import coupon_system.utilities.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -27,6 +28,7 @@ import java.util.Date;
 @Service
 public class AdminService implements Validations {
 
+    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
@@ -34,11 +36,13 @@ public class AdminService implements Validations {
     private final TokenRepository tokenRepository;
 
     @Autowired
-    public AdminService(CompanyRepository companyRepository,
+    public AdminService(UserRepository userRepository,
+                        CompanyRepository companyRepository,
                         CouponRepository couponRepository,
                         CustomerRepository customerRepository,
                         IncomeRepository incomeRepository,
                         TokenRepository tokenRepository) {
+        this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
         this.customerRepository = customerRepository;
@@ -48,18 +52,16 @@ public class AdminService implements Validations {
 
     public long login(String username,
                       String password) throws LoginFailedException {
-        if (username.equalsIgnoreCase("admin") && password.equals("admin")) {
-            return 1;
-        } else {
-            throw new LoginFailedException("Authorization is failed, please try again.");
-        }
+        return userRepository.login(username, password)
+                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again.")).getId();
     }
 
     /**
      * COMPANY methods
      */
-    public void createCompany(Company company) throws CompanyNameDuplicateException {
+    public void createCompany(Company company) throws CompanyNameDuplicateException, CompanyEmailDuplicateException {
         this.isCompanyNameDuplicate(company.getName(), companyRepository);
+        this.isCompanyEmailDuplicate(company.getEmail(), companyRepository);
         companyRepository.save(company);
     }
 
@@ -73,9 +75,10 @@ public class AdminService implements Validations {
                 .orElseThrow(() -> new CompanyNotExistsException("There are no companies."));
     }
 
-    public void updateCompany(Company company) throws CompanyNameDuplicateException, CompanyNotExistsException {
+    public void updateCompany(Company company) throws CompanyNameDuplicateException, CompanyNotExistsException, CompanyEmailDuplicateException {
         this.isCompanyExists(company.getId(), companyRepository);
         this.isCompanyNameDuplicate(company.getName(), companyRepository);
+        this.isCompanyEmailDuplicate(company.getEmail(), companyRepository);
         companyRepository.save(company);
     }
 
@@ -151,8 +154,8 @@ public class AdminService implements Validations {
     /**
      * CUSTOMER methods
      */
-    public void createCustomer(Customer customer) throws CouponSystemException {
-        this.isCustomerNameDuplicate(customer.getName(), customerRepository);
+    public void createCustomer(Customer customer) throws CustomerEmailDuplicateException {
+        this.isCustomerEmailDuplicate(customer.getEmail(), customerRepository);
         customerRepository.save(customer);
     }
 
@@ -161,14 +164,14 @@ public class AdminService implements Validations {
                 .orElseThrow(() -> new CustomerNotExistsException("This customer doesn't exist."));
     }
 
-    public Collection<Customer> getAllCustomers() throws CouponSystemException {
+    public Collection<Customer> getAllCustomers() throws CustomerNotExistsException {
         return customerRepository.findAllCustomers()
                 .orElseThrow(() -> new CustomerNotExistsException("There are no customers."));
     }
 
-    public void updateCustomer(Customer customer) throws CouponSystemException {
+    public void updateCustomer(Customer customer) throws CustomerNotExistsException, CustomerEmailDuplicateException {
         this.isCustomerExists(customer.getId(), customerRepository);
-        this.isCustomerNameDuplicate(customer.getName(), customerRepository);
+        this.isCustomerEmailDuplicate(customer.getEmail(), customerRepository);
         customerRepository.save(customer);
     }
 

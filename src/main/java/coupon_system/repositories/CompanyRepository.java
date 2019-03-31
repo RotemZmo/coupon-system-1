@@ -17,7 +17,10 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("SELECT DISTINCT c FROM Company c WHERE UPPER(c.name) LIKE UPPER(:name)")
     Optional<Company> findByName(String name);
 
+    @Query("SELECT DISTINCT c FROM Company c WHERE UPPER(c.email) LIKE UPPER(:email)")
+    Optional<Company> findByEmail(String email);
+
     @Query("SELECT DISTINCT c FROM Company c WHERE UPPER(c.name) LIKE UPPER(:name) AND c.password = :password")
-    Optional<Company> login(String name, String password);
+    Optional<Company> findByNameAndPassword(String name, String password);
 
 }

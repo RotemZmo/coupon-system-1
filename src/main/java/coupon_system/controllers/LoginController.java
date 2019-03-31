@@ -34,12 +34,10 @@ public class LoginController {
         switch (user.getClientType()) {
             case ADMIN:
                 try {
-                    if (couponSystem.login(user.getName(), user.getPassword(), user.getClientType()) == 1) {
-                        Token token = new Token(ClientType.ADMIN, DateGenerator.getDateAfterMonths(2), SecureTokenGenerator.nextToken());
-                        return getResponseEntity(response, token);
-                    }
+                    long adminId = couponSystem.login(user.getName(), user.getPassword(), user.getClientType());
+                    Token token = new Token(adminId, ClientType.ADMIN, DateGenerator.getDateAfterMonths(2), SecureTokenGenerator.nextToken());
+                    return getResponseEntity(response, token);
                 } catch (LoginFailedException e) {
-                    e.printStackTrace();
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
                 }
             case COMPANY:
@@ -48,7 +46,6 @@ public class LoginController {
                     Token token = new Token(companyId, ClientType.COMPANY, DateGenerator.getDateAfterMonths(2), SecureTokenGenerator.nextToken());
                     return getResponseEntity(response, token);
                 } catch (LoginFailedException e) {
-                    e.printStackTrace();
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
                 }
             case CUSTOMER:
@@ -57,7 +54,6 @@ public class LoginController {
                     Token token = new Token(customerId, ClientType.CUSTOMER, DateGenerator.getDateAfterMonths(2), SecureTokenGenerator.nextToken());
                     return getResponseEntity(response, token);
                 } catch (LoginFailedException e) {
-                    e.printStackTrace();
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
                 }
             default:
@@ -68,7 +64,7 @@ public class LoginController {
     private ResponseEntity<?> getResponseEntity(HttpServletResponse response, Token token) {
         tokenRepository.save(token);
         Cookie cookie = new Cookie("auth", token.getToken());
-        cookie.setMaxAge(/* 2 months */ 5000000);
+        cookie.setMaxAge(/* ~2 months */ 5000000);
         response.addCookie(cookie);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

@@ -40,7 +40,7 @@ public class CompanyService implements Validations {
 
     public long login(String username,
                       String password) throws LoginFailedException {
-        return companyRepository.login(username, password)
+        return companyRepository.findByNameAndPassword(username, password)
                 .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again.")).getId();
     }
 

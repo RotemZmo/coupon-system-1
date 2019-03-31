@@ -16,7 +16,7 @@ export class CustomerAuthGuard implements CanActivate, CanActivateChild {
     if (this.auth.isCustomerLoggedIn()) {
       return of(true)
     } else {
-      this.router.navigate(['/login'])
+      this.router.navigate(['/findByNameAndPassword'])
       return of(false)
     }
   }

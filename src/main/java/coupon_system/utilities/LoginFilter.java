@@ -30,7 +30,7 @@ public class LoginFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String path = req.getRequestURL().toString();
-        if (!path.contains("login")) {
+        if (!path.contains("findByNameAndPassword")) {
             if (!path.contains("registration")) {
                 Cookie[] cookies = req.getCookies();
                 if (cookies != null) {
