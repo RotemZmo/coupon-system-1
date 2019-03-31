@@ -92,5 +92,3 @@ class User {
         return clientType;
     }
 }
-
-

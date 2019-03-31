@@ -98,11 +98,12 @@ public class Token implements Serializable, Comparable<Token> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Token)) return false;
-        Token token = (Token) o;
-        return getId() == token.getId();
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Token)) {
+            return false;
+        }
+        Token other = (Token) obj;
+        return this.id == other.id;
     }
 
     @Override

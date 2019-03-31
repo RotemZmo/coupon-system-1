@@ -9,20 +9,11 @@ import java.util.Collection;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Customer implements Serializable, Comparable<Customer> {
+public class Customer extends User implements Serializable {
 
     @Id
     @GeneratedValue
     private long id;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private String email;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "customer_coupon",
@@ -33,38 +24,7 @@ public class Customer implements Serializable, Comparable<Customer> {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     private Collection<Income> incomes;
 
-    @OneToOne
-    private Token token;
-
     public Customer() {
-    }
-
-    public Customer(String name,
-                    String password,
-                    String email,
-                    Collection<Coupon> coupons) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.coupons = coupons;
-    }
-
-    public Customer(long id,
-                    String name,
-                    String password,
-                    String email) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.email = email;
-    }
-
-    public Customer(String name,
-                    String password,
-                    String email) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
     }
 
     public long getId() {
@@ -76,52 +36,31 @@ public class Customer implements Serializable, Comparable<Customer> {
     }
 
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     public void setName(String custName) {
-        this.name = custName;
+        super.setName(custName);
     }
 
     public String getPassword() {
-        return password;
+        return super.getPassword();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        super.setPassword(password);
     }
 
     public String getEmail() {
-        return email;
+        return super.getEmail();
     }
 
     public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Collection<Coupon> getCoupons() {
-        return coupons;
-    }
-
-    public void setCoupons(Collection<Coupon> coupons) {
-        this.coupons = coupons;
+        super.setEmail(email);
     }
 
     public void purchaseCoupon(Coupon coupon) {
         coupons.add(coupon);
-    }
-
-    public Token getToken() {
-        return token;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
-    }
-
-    @Override
-    public int compareTo(Customer customer) {
-        return Long.compare(this.id, customer.id);
     }
 
     @Override
@@ -143,10 +82,13 @@ public class Customer implements Serializable, Comparable<Customer> {
 
     @Override
     public String toString() {
-        return String.format("Customer ID: %d," +
-                        " Name: %s," +
-                        " Password: %s," +
-                        " Email: %s",
-                id, name, password, email);
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + super.getName() + '\'' +
+                ", password='" + super.getPassword() + '\'' +
+                ", email='" + super.getEmail() + '\'' +
+                ", coupons=" + coupons +
+                ", incomes=" + incomes +
+                '}';
     }
 }

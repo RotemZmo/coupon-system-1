@@ -3,25 +3,30 @@ package coupon_system.entities;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Collection;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Company extends User implements Serializable {
+public class User implements Serializable, Comparable<User> {
 
     @Id
     @GeneratedValue
     private long id;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
-    private Collection<Coupon> coupons;
+    @Column(nullable = false)
+    private String name;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
-    private Collection<Income> incomes;
+    @Column(nullable = false)
+    private String password;
 
-    public Company() {
+    @Column(nullable = false)
+    private String email;
+
+    public User() {
     }
 
     public long getId() {
@@ -33,27 +38,32 @@ public class Company extends User implements Serializable {
     }
 
     public String getName() {
-        return super.getName();
+        return name;
     }
 
-    public void setName(String compName) {
-        super.setName(compName);
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
-        return super.getPassword();
+        return password;
     }
 
     public void setPassword(String password) {
-        super.setPassword(password);
+        this.password = password;
     }
 
     public String getEmail() {
-        return super.getEmail();
+        return email;
     }
 
     public void setEmail(String email) {
-        super.setEmail(email);
+        this.email = email;
+    }
+
+    @Override
+    public int compareTo(User user) {
+        return Long.compare(this.id, user.id);
     }
 
     @Override
@@ -66,22 +76,20 @@ public class Company extends User implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Company)) {
+        if (!(obj instanceof User)) {
             return false;
         }
-        Company other = (Company) obj;
+        User other = (User) obj;
         return this.id == other.id;
     }
 
     @Override
     public String toString() {
-        return "Company{" +
+        return "User{" +
                 "id=" + id +
-                ", name='" + super.getName() + '\'' +
-                ", password='" + super.getPassword() + '\'' +
-                ", email='" + super.getEmail() + '\'' +
-                ", coupons=" + coupons +
-                ", incomes=" + incomes +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

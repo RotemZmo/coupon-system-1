@@ -53,78 +53,6 @@ public class Coupon implements Serializable, Comparable<Coupon> {
     public Coupon() {
     }
 
-    public Coupon(String title,
-                  Date startDate,
-                  Date endDate,
-                  int amount,
-                  CouponType couponType,
-                  String message,
-                  double price,
-                  Company company) {
-        this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-        this.couponType = couponType;
-        this.message = message;
-        this.price = price;
-        this.company = company;
-    }
-
-    public Coupon(String title,
-                  Date startDate,
-                  Date endDate,
-                  int amount,
-                  CouponType couponType,
-                  String message,
-                  double price) {
-        this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-        this.couponType = couponType;
-        this.message = message;
-        this.price = price;
-    }
-
-    public Coupon(long id,
-                  String title,
-                  Date startDate,
-                  Date endDate,
-                  CouponType couponType,
-                  String message,
-                  double price,
-                  String image,
-                  Company company) {
-        this.id = id;
-        this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-        this.couponType = couponType;
-        this.message = message;
-        this.price = price;
-        this.company = company;
-    }
-
-    public Coupon(long id,
-                  String title,
-                  Date startDate,
-                  Date endDate,
-                  int amount,
-                  CouponType couponType,
-                  String message,
-                  double price) {
-        this.id = id;
-        this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-        this.couponType = couponType;
-        this.message = message;
-        this.price = price;
-    }
-
     public long getId() {
         return id;
     }
@@ -189,10 +117,6 @@ public class Coupon implements Serializable, Comparable<Coupon> {
         this.price = price;
     }
 
-    public Company getCompany() {
-        return company;
-    }
-
     public void setCompany(Company company) {
         this.company = company;
     }
@@ -225,15 +149,16 @@ public class Coupon implements Serializable, Comparable<Coupon> {
 
     @Override
     public String toString() {
-        return String.format("Coupon ID: %d, " +
-                        "Title: %s, " +
-                        "Amount: %d, " +
-                        "Coupon type: %s, " +
-                        "Message: %s, " +
-                        "Price: %f, " +
-                        "Start date: %s, " +
-                        "End date: %s",
-                id, title, amount, couponType, message, price, startDate, endDate);
+        return "Coupon{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", amount=" + amount +
+                ", couponType=" + couponType +
+                ", message='" + message + '\'' +
+                ", price=" + price +
+                ", companyId=" + company.getId() +
+                '}';
     }
-
 }
