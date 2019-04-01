@@ -28,6 +28,7 @@ import {GetCustomerCouponsComponent} from './customer/get-customer-coupons/get-c
 import {GetCouponsComponent} from './admin/get-coupons/get-coupons.component'
 import {CreateCouponComponent} from "./admin/create-coupon/create-coupon.component"
 import {Page404Component} from "./shared/page404/page404.component"
+import {GetIncomesComponent} from './admin/get-incomes/get-incomes.component'
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import {Page404Component} from "./shared/page404/page404.component"
     GetCompanyCouponsComponent,
     CustomerComponent,
     PurchaseCouponComponent,
-    GetCustomerCouponsComponent
+    GetCustomerCouponsComponent,
+    GetIncomesComponent
   ],
   imports: [
     BrowserModule,

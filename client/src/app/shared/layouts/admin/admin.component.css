@@ -76,6 +76,15 @@ table {
   width: 1000px;
 }
 
+.button4 {
+  color: #3e50b5;
+  text-align: left;
+  font-weight: normal;
+  font-size: 14px;
+  width: 230px;
+  margin-left: 9px;
+}
+
 h1 {
   text-align: center;
   font-family: Arial;

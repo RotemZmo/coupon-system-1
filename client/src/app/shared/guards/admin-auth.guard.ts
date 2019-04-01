@@ -16,7 +16,7 @@ export class AdminAuthGuard implements CanActivate, CanActivateChild {
     if (this.auth.isAdminLoggedIn()) {
       return of(true)
     } else {
-      this.router.navigate(['/findByNameAndPassword'])
+      this.router.navigate(['/login'])
       return of(false)
     }
   }

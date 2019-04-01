@@ -20,6 +20,7 @@ import {AdminAuthGuard} from "./shared/guards/admin-auth.guard"
 import {Page404Component} from "./shared/page404/page404.component"
 import {CompanyAuthGuard} from "./shared/guards/company-auth.guard"
 import {CustomerAuthGuard} from "./shared/guards/customer-auth.guard"
+import {GetIncomesComponent} from "./admin/get-incomes/get-incomes.component"
 
 const routes: Routes = [
   {
@@ -36,7 +37,8 @@ const routes: Routes = [
       {path: 'create-coupon', component: CreateCouponComponent},
       {path: 'get-coupons', component: GetCouponsComponent},
       {path: 'create-customer', component: CreateCustomerComponent},
-      {path: 'get-customers', component: GetCustomersComponent}
+      {path: 'get-customers', component: GetCustomersComponent},
+      {path: 'get-incomes', component: GetIncomesComponent}
     ]
   },
   {

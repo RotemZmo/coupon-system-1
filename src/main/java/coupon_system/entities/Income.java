@@ -113,6 +113,22 @@ public class Income implements Serializable, Comparable<Income> {
         this.description = description;
     }
 
+    public String getCompanyName() {
+        if (company != null) {
+            return company.getName();
+        } else {
+            return null;
+        }
+    }
+
+    public String getCustomerName() {
+        if (customer != null) {
+            return customer.getName();
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public int compareTo(Income company) {
         return Long.compare(this.id, company.id);

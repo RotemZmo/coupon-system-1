@@ -6,6 +6,7 @@ import {ErrorService} from "./error.service"
 import {Company} from "../../models/company"
 import {Customer} from "../../models/customer"
 import {Coupon} from "../../models/coupon"
+import {Income} from "../../models/income"
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AdminService {
   private companyUrl = 'http://localhost:8080/admin/companies'
   private couponUrl = 'http://localhost:8080/admin/coupons'
   private customerUrl = 'http://localhost:8080/admin/customers'
+  private incomeUrl = 'http://localhost:8080/admin/incomes'
 
   constructor(private http: HttpClient, private errorService: ErrorService) {
   }
@@ -76,6 +78,11 @@ export class AdminService {
 
   public getAllCustomers(): Observable<Customer[]> {
     return this.http.get<Customer[]>(this.customerUrl, {withCredentials: true}).pipe(
+      catchError(err => this.errorService.errorHandler(err)))
+  }
+
+  public getIncomes(): Observable<Income[]> {
+    return this.http.get<Income[]>(this.incomeUrl, {withCredentials: true}).pipe(
       catchError(err => this.errorService.errorHandler(err)))
   }
 

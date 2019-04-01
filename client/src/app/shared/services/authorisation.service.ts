@@ -11,7 +11,7 @@ import {Router} from "@angular/router"
 })
 export class AuthorisationService {
 
-  private logUrl = 'http://localhost:8080/findByNameAndPassword'
+  private logUrl = 'http://localhost:8080/login'
   private regCompanyUrl = 'http://localhost:8080/registration/companies'
   private regCustomerUrl = 'http://localhost:8080/registration/customers'
 
@@ -64,7 +64,7 @@ export class AuthorisationService {
 
   public logout() {
     sessionStorage.clear()
-    this.router.navigate(['/findByNameAndPassword'])
+    this.router.navigate(['/login'])
   }
 
 }

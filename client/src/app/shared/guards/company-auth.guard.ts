@@ -16,7 +16,7 @@ export class CompanyAuthGuard implements CanActivate, CanActivateChild {
     if (this.auth.isCompanyLoggedIn()) {
       return of(true)
     } else {
-      this.router.navigate(['/findByNameAndPassword'])
+      this.router.navigate(['/login'])
       return of(false)
     }
   }
