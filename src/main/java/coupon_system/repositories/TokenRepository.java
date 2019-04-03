@@ -8,12 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
 
-    Token findByToken(String token);
+    Optional<Token> findByToken(String token);
 
-    Token findByClientTypeAndToken(ClientType clientType, String token);
+    Optional<Token> findByClientTypeAndToken(ClientType clientType, String token);
 
     @Modifying
     @Transactional

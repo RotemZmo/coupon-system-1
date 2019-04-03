@@ -1,6 +1,9 @@
 package coupon_system.controllers;
 
-import coupon_system.entities.*;
+import coupon_system.entities.Company;
+import coupon_system.entities.Coupon;
+import coupon_system.entities.Customer;
+import coupon_system.entities.Income;
 import coupon_system.enums.ClientType;
 import coupon_system.exceptions.CouponSystemException;
 import coupon_system.exceptions.LoginFailedException;
@@ -249,8 +252,7 @@ public class AdminController {
         Cookie[] cookies = request.getCookies();
         for (Cookie c : cookies) {
             if (c.getName().equals("auth")) {
-                Token token = tokenRepository.findByClientTypeAndToken(ClientType.ADMIN, c.getValue());
-                if (token == null) {
+                if (!tokenRepository.findByClientTypeAndToken(ClientType.ADMIN, c.getValue()).isPresent()) {
                     throw new LoginFailedException("Authorization is failed, please try again.");
                 }
             }

@@ -1,9 +1,7 @@
 package coupon_system.utilities;
 
-import coupon_system.entities.Token;
 import coupon_system.repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -17,7 +15,7 @@ import java.io.IOException;
 @WebFilter("/*")
 public class LoginFilter implements Filter {
 
-    private TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
 
     @Autowired
     public LoginFilter(TokenRepository tokenRepository) {
@@ -30,14 +28,13 @@ public class LoginFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String path = req.getRequestURL().toString();
-        if (!path.contains("findByNameAndPassword")) {
+        if (!path.contains("login")) {
             if (!path.contains("registration")) {
                 Cookie[] cookies = req.getCookies();
                 if (cookies != null) {
                     for (Cookie c : cookies) {
                         if ("auth".equals(c.getName())) {
-                            Token token = tokenRepository.findByToken(c.getValue());
-                            if (token == null) {
+                            if (!tokenRepository.findByToken(c.getValue()).isPresent()) {
                                 res.sendRedirect("http://localhost:4200");
                                 return;
                             }

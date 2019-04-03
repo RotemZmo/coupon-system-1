@@ -6,8 +6,8 @@ import coupon_system.entities.Token;
 import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
+import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.couponExceptions.CouponUnavaliableException;
-import coupon_system.exceptions.customerExceptions.CustomerDoesntOwnCoupon;
 import coupon_system.repositories.CustomerRepository;
 import coupon_system.repositories.TokenRepository;
 import coupon_system.services.CustomerService;
@@ -58,7 +58,7 @@ public class CustomerController {
         try {
             Collection<Coupon> coupons = customerService.getPurchasedCoupons(getCustomer());
             return new ResponseEntity<>(coupons, HttpStatus.OK);
-        } catch (CustomerDoesntOwnCoupon e) {
+        } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -68,7 +68,7 @@ public class CustomerController {
         try {
             Collection<Coupon> coupons = customerService.getPurchasedCouponsByType(getCustomer(), couponType);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
-        } catch (CustomerDoesntOwnCoupon e) {
+        } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -78,7 +78,7 @@ public class CustomerController {
         try {
             Collection<Coupon> coupons = customerService.getPurchasedCouponsByPrice(getCustomer(), price);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
-        } catch (CustomerDoesntOwnCoupon e) {
+        } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -93,18 +93,16 @@ public class CustomerController {
         }
     }
 
-    private Customer getCustomer() {
-        Customer customer = null;
+    private Customer getCustomer() throws LoginFailedException {
         Token token = null;
         Cookie[] cookies = request.getCookies();
         for (Cookie c : cookies) {
             if (c.getName().equals("auth")) {
-                token = tokenRepository.findByClientTypeAndToken(ClientType.CUSTOMER, c.getValue());
+                token = tokenRepository.findByClientTypeAndToken(ClientType.CUSTOMER, c.getValue())
+                        .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again."));
             }
         }
-        if (token != null) {
-            customer = customerRepository.findById(token.getUserId()).get();
-        }
-        return customer;
+        return customerRepository.findById(token.getUserId())
+                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again."));
     }
 }

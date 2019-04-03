@@ -7,7 +7,7 @@ import coupon_system.entities.Token;
 import coupon_system.enums.ClientType;
 import coupon_system.enums.CouponType;
 import coupon_system.exceptions.CouponSystemException;
-import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
+import coupon_system.exceptions.LoginFailedException;
 import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.TokenRepository;
 import coupon_system.services.CompanyService;
@@ -78,7 +78,7 @@ public class CompanyController {
         try {
             Collection<Coupon> coupons = companyService.getAllCompanyCouponsByType(getCompany(), couponType);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
-        } catch (CompanyDoesntOwnCoupon e) {
+        } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -88,7 +88,7 @@ public class CompanyController {
         try {
             Collection<Coupon> coupons = companyService.getAllCompanyCouponsByPrice(getCompany(), price);
             return new ResponseEntity<>(coupons, HttpStatus.OK);
-        } catch (CompanyDoesntOwnCoupon e) {
+        } catch (CouponSystemException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -123,18 +123,16 @@ public class CompanyController {
         }
     }
 
-    private Company getCompany() {
-        Company company = null;
+    private Company getCompany() throws LoginFailedException {
         Token token = null;
         Cookie[] cookies = request.getCookies();
         for (Cookie c : cookies) {
             if (c.getName().equals("auth")) {
-                token = tokenRepository.findByClientTypeAndToken(ClientType.COMPANY, c.getValue());
+                token = tokenRepository.findByClientTypeAndToken(ClientType.COMPANY, c.getValue())
+                        .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again."));
             }
         }
-        if (token != null) {
-            company = companyRepository.findById(token.getUserId()).get();
-        }
-        return company;
+        return companyRepository.findById(token.getUserId())
+                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again."));
     }
 }
