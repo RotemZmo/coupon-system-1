@@ -6,7 +6,6 @@ import coupon_system.entities.Income;
 import coupon_system.enums.CouponType;
 import coupon_system.enums.IncomeType;
 import coupon_system.exceptions.CouponSystemException;
-import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
 import coupon_system.exceptions.couponExceptions.CouponNotExistsException;
 import coupon_system.exceptions.couponExceptions.CouponUnavaliableException;
@@ -36,12 +35,6 @@ public class CustomerService implements Validations {
         this.customerRepository = customerRepository;
         this.couponRepository = couponRepository;
         this.incomeRepository = incomeRepository;
-    }
-
-    public long login(String username,
-                      String password) throws LoginFailedException {
-        return customerRepository.findByNameAndPassword(username, password)
-                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again.")).getId();
     }
 
     public void purchaseCoupon(Customer customer, long couponId) throws CouponSystemException {

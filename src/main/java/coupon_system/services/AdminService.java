@@ -7,7 +7,6 @@ import coupon_system.entities.Income;
 import coupon_system.enums.ClientType;
 import coupon_system.enums.IncomeType;
 import coupon_system.exceptions.CouponSystemException;
-import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.companyExceptions.CompanyEmailDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNameDuplicateException;
 import coupon_system.exceptions.companyExceptions.CompanyNotExistsException;
@@ -28,7 +27,6 @@ import java.util.Date;
 @Service
 public class AdminService implements Validations {
 
-    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
@@ -36,24 +34,16 @@ public class AdminService implements Validations {
     private final TokenRepository tokenRepository;
 
     @Autowired
-    public AdminService(UserRepository userRepository,
-                        CompanyRepository companyRepository,
+    public AdminService(CompanyRepository companyRepository,
                         CouponRepository couponRepository,
                         CustomerRepository customerRepository,
                         IncomeRepository incomeRepository,
                         TokenRepository tokenRepository) {
-        this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
         this.customerRepository = customerRepository;
         this.incomeRepository = incomeRepository;
         this.tokenRepository = tokenRepository;
-    }
-
-    public long login(String username,
-                      String password) throws LoginFailedException {
-        return userRepository.login(username, password)
-                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again.")).getId();
     }
 
     /**

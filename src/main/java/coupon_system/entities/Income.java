@@ -34,32 +34,28 @@ public class Income implements Serializable, Comparable<Income> {
     @Enumerated(EnumType.STRING)
     private IncomeType description;
 
-    public Income(Company company,
-                  Date date,
-                  Date expDate,
-                  IncomeType description) {
-        this.company = company;
-        this.date = date;
-        this.description = description;
-        this.expDate = expDate;
-    }
-
-    public Income(Customer customer,
-                  Date date,
-                  Date expDate,
-                  IncomeType description) {
-        this.customer = customer;
-        this.date = date;
-        this.description = description;
-        this.expDate = expDate;
-    }
-
     public Income(Date date,
                   Date expDate,
                   IncomeType description) {
         this.date = date;
         this.description = description;
         this.expDate = expDate;
+    }
+
+    public Income(Company company,
+                  Date date,
+                  Date expDate,
+                  IncomeType description) {
+        this(date, expDate, description);
+        this.company = company;
+    }
+
+    public Income(Customer customer,
+                  Date date,
+                  Date expDate,
+                  IncomeType description) {
+        this(date, expDate, description);
+        this.customer = customer;
     }
 
     public Income() {

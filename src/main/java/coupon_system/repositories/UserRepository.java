@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT DISTINCT u FROM User u WHERE UPPER(u.name) LIKE UPPER(:name) AND u.password = :password")
-    Optional<User> login(String name, String password);
+    Optional<User> findByNameAndPassword(String name, String password);
 }

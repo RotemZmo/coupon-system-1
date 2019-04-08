@@ -34,22 +34,20 @@ public class Token implements Serializable, Comparable<Token> {
     public Token() {
     }
 
-    public Token(long userId,
-                 ClientType clientType,
-                 Date expDate,
-                 String token) {
-        this.userId = userId;
-        this.clientType = clientType;
-        this.expDate = expDate;
-        this.token = token;
-    }
-
     public Token(ClientType clientType,
                  Date expDate,
                  String token) {
         this.clientType = clientType;
         this.expDate = expDate;
         this.token = token;
+    }
+
+    public Token(long userId,
+                 ClientType clientType,
+                 Date expDate,
+                 String token) {
+        this(clientType, expDate, token);
+        this.userId = userId;
     }
 
     public long getId() {

@@ -6,12 +6,10 @@ import coupon_system.entities.Income;
 import coupon_system.enums.CouponType;
 import coupon_system.enums.IncomeType;
 import coupon_system.exceptions.CouponSystemException;
-import coupon_system.exceptions.LoginFailedException;
 import coupon_system.exceptions.companyExceptions.CompanyDoesntOwnCoupon;
 import coupon_system.exceptions.couponExceptions.CouponExpiredException;
 import coupon_system.exceptions.couponExceptions.CouponTitleDuplicateException;
 import coupon_system.exceptions.couponExceptions.CouponUnavaliableException;
-import coupon_system.repositories.CompanyRepository;
 import coupon_system.repositories.CouponRepository;
 import coupon_system.repositories.IncomeRepository;
 import coupon_system.utilities.DateGenerator;
@@ -25,23 +23,14 @@ import java.util.Date;
 @Service
 public class CompanyService implements Validations {
 
-    private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final IncomeRepository incomeRepository;
 
     @Autowired
-    public CompanyService(CompanyRepository companyRepository,
-                          CouponRepository couponRepository,
+    public CompanyService(CouponRepository couponRepository,
                           IncomeRepository incomeRepository) {
-        this.companyRepository = companyRepository;
         this.couponRepository = couponRepository;
         this.incomeRepository = incomeRepository;
-    }
-
-    public long login(String username,
-                      String password) throws LoginFailedException {
-        return companyRepository.findByNameAndPassword(username, password)
-                .orElseThrow(() -> new LoginFailedException("Authorization is failed, please try again.")).getId();
     }
 
     public void createCoupon(Company company, Coupon coupon) throws CouponTitleDuplicateException {
