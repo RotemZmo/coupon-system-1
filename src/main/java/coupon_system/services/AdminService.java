@@ -17,6 +17,7 @@ import coupon_system.exceptions.customerExceptions.CustomerEmailDuplicateExcepti
 import coupon_system.exceptions.customerExceptions.CustomerNotExistsException;
 import coupon_system.repositories.*;
 import coupon_system.utilities.DateGenerator;
+import coupon_system.utilities.PasswordEncryption;
 import coupon_system.utilities.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,12 @@ public class AdminService implements Validations {
     public void createCompany(Company company) throws CompanyNameDuplicateException, CompanyEmailDuplicateException {
         this.isCompanyNameDuplicate(company.getName(), companyRepository);
         this.isCompanyEmailDuplicate(company.getEmail(), companyRepository);
+
+        /*
+         * Encrypting password of the company
+         */
+        company.setPassword(PasswordEncryption.getEncrypt(company.getPassword()));
+
         companyRepository.save(company);
     }
 
@@ -69,6 +76,12 @@ public class AdminService implements Validations {
         this.isCompanyExists(company.getId(), companyRepository);
         this.isCompanyNameDuplicate(company.getName(), companyRepository);
         this.isCompanyEmailDuplicate(company.getEmail(), companyRepository);
+
+        /*
+         * Encrypting password of the company
+         */
+        company.setPassword(PasswordEncryption.getEncrypt(company.getPassword()));
+
         companyRepository.save(company);
     }
 
@@ -146,6 +159,12 @@ public class AdminService implements Validations {
      */
     public void createCustomer(Customer customer) throws CustomerEmailDuplicateException {
         this.isCustomerEmailDuplicate(customer.getEmail(), customerRepository);
+
+        /*
+         * Encrypting password of the customer
+         */
+        customer.setPassword(PasswordEncryption.getEncrypt(customer.getPassword()));
+
         customerRepository.save(customer);
     }
 
@@ -162,6 +181,12 @@ public class AdminService implements Validations {
     public void updateCustomer(Customer customer) throws CustomerNotExistsException, CustomerEmailDuplicateException {
         this.isCustomerExists(customer.getId(), customerRepository);
         this.isCustomerEmailDuplicate(customer.getEmail(), customerRepository);
+
+        /*
+         * Encrypting password of the customer
+         */
+        customer.setPassword(PasswordEncryption.getEncrypt(customer.getPassword()));
+
         customerRepository.save(customer);
     }
 
